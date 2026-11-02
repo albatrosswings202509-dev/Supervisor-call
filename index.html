@@ -89,7 +89,7 @@
           </h1>
           <div class="flex items-center gap-2 text-xs text-slate-400">
             <span id="syncIndicator" class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="lastSyncText">Synced with Google Sheet & GitHub</span>
+            <span id="lastSyncText">Synced with GitHub data.json</span>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Refresh Button -->
-        <button id="refreshBtn" onclick="syncData()" class="p-2 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-cyanGlow text-slate-300 hover:text-cyanGlow transition" title="Sync Now">
+        <button id="refreshBtn" onclick="syncData(true)" class="p-2 rounded-lg border border-slate-700 bg-slate-900/80 hover:border-cyanGlow text-slate-300 hover:text-cyanGlow transition" title="Sync Now">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
           </svg>
@@ -128,10 +128,10 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- 1. TOP KPI SUMMARY CARDS -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      <!-- Total Calls -->
-      <div class="cyber-card rounded-2xl p-4 relative overflow-hidden">
+    <!-- 1. TOP KPI SUMMARY CARDS (3 Cards Only) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- Card 1: Total Calls -->
+      <div class="cyber-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Calls (MTD)</p>
@@ -139,73 +139,39 @@
           </div>
           <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyanGlow border border-cyan-500/30">MTD</span>
         </div>
-        <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-          <span class="text-slate-400">Selected Date:</span>
-          <span id="kpiTodayCalls" class="font-bold text-white bg-neonViolet/30 border border-neonViolet/50 px-2 py-0.5 rounded">0 Calls</span>
+        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Selected Date Calls:</span>
+          <span id="kpiTodayCalls" class="font-bold text-white bg-neonViolet/30 border border-neonViolet/50 px-2.5 py-0.5 rounded">0 Calls</span>
         </div>
       </div>
 
-      <!-- Inbound vs Outbound Split -->
-      <div class="cyber-card rounded-2xl p-4">
+      <!-- Card 2: Inbound vs Outbound Split -->
+      <div class="cyber-card rounded-2xl p-5">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Inbound vs Outbound</p>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Inbound vs Outbound Split</p>
             <div class="flex items-baseline gap-3 mt-1">
-              <span id="kpiInboundPct" class="text-2xl font-extrabold text-cyanGlow">0%</span>
+              <span id="kpiInboundPct" class="text-3xl font-extrabold text-cyanGlow">0%</span>
               <span class="text-xs text-slate-400">vs</span>
-              <span id="kpiOutboundPct" class="text-xl font-bold text-neonViolet">0%</span>
+              <span id="kpiOutboundPct" class="text-2xl font-bold text-neonViolet">0%</span>
             </div>
           </div>
-          <span class="text-xs font-semibold text-slate-400">Split</span>
+          <span class="text-xs font-semibold text-slate-400">Call Type</span>
         </div>
-        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mt-3 flex">
+        <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden mt-3.5 flex">
           <div id="kpiInboundBar" class="bg-cyanGlow h-full transition-all duration-500" style="width: 70%"></div>
           <div id="kpiOutboundBar" class="bg-neonViolet h-full transition-all duration-500" style="width: 30%"></div>
         </div>
-        <div class="mt-2 flex justify-between text-xs text-slate-400">
+        <div class="mt-2.5 flex justify-between text-xs text-slate-400">
           <span>Inbound: <strong id="kpiInboundCount" class="text-slate-200">0</strong></span>
           <span>Outbound: <strong id="kpiOutboundCount" class="text-slate-200">0</strong></span>
         </div>
       </div>
 
-      <!-- Skill-wise Breakdown -->
-      <div class="cyber-card rounded-2xl p-4">
+      <!-- Card 3: Skill-wise Breakdown -->
+      <div class="cyber-card rounded-2xl p-5">
         <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Skill-Wise Breakdown</p>
-        <div id="kpiSkillBreakdown" class="mt-2.5 grid grid-cols-2 gap-1.5 text-xs"></div>
-      </div>
-
-      <!-- Active Supervisors -->
-      <div class="cyber-card rounded-2xl p-4">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Supervisors</p>
-            <h2 class="text-3xl font-extrabold text-neonViolet mt-1">
-              <span id="kpiActiveSup">0</span><span class="text-lg text-slate-500 font-semibold"> / <span id="kpiTotalSup">11</span></span>
-            </h2>
-          </div>
-          <span class="px-2 py-1 rounded-full text-xs font-bold bg-violet-500/15 text-neonViolet border border-violet-500/30">Active</span>
-        </div>
-        <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-          <span class="text-slate-400">On Selected Date:</span>
-          <span id="kpiTodayActiveSup" class="font-bold text-cyanGlow">0 Active</span>
-        </div>
-      </div>
-
-      <!-- Zero-Transfer Star Coverage -->
-      <div class="cyber-card rounded-2xl p-4">
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Zero-Transfer Stars</p>
-            <h2 class="text-3xl font-extrabold text-emerald-400 mt-1">
-              <span id="kpiZeroTransferCount">0</span><span class="text-lg text-slate-500 font-semibold"> / <span id="kpiTotalAgents">226</span></span>
-            </h2>
-          </div>
-          <span class="px-2 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Self-Solved</span>
-        </div>
-        <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-          <span class="text-slate-400">Zero-Transfer Rate:</span>
-          <span id="kpiZeroTransferPct" class="font-bold text-emerald-400">0%</span>
-        </div>
+        <div id="kpiSkillBreakdown" class="mt-3 grid grid-cols-2 gap-2 text-xs"></div>
       </div>
     </section>
 
@@ -245,15 +211,19 @@
         </div>
       </div>
 
-      <!-- Daily Trend Line Chart -->
+      <!-- Daily Call Transfer Trend Chart -->
       <div class="cyber-card rounded-2xl p-5">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between gap-2 mb-4">
           <div>
             <h3 class="text-base font-bold text-white flex items-center gap-2">
               <span class="w-2 h-5 rounded bg-emerald-400"></span>
               Daily Call Transfer Trend
             </h3>
-            <p class="text-xs text-slate-400">Date-wise progression</p>
+            <p class="text-xs text-slate-400">Date-wise Inbound & Outbound chart</p>
+          </div>
+          <div class="flex bg-slate-900 p-1 rounded-lg border border-slate-700 text-xs">
+            <button id="trendBtnLine" onclick="setTrendChartType('line')" class="px-2.5 py-1 rounded-md font-semibold bg-cyanGlow text-obsidian transition">Line</button>
+            <button id="trendBtnBar" onclick="setTrendChartType('bar')" class="px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white transition">Bar</button>
           </div>
         </div>
         <div class="h-72 relative">
@@ -270,7 +240,7 @@
             <span class="w-2.5 h-6 rounded bg-gradient-to-b from-cyanGlow to-neonViolet"></span>
             Smart Filter & Searchable Call Log
           </h3>
-          <p class="text-xs text-slate-400">Instant filtering across AVAYA ID, CSA Name, MSISDN, Supervisor & TL</p>
+          <p class="text-xs text-slate-400">Filter by Date Range, Supervisor, Team Leader, Skill, Call Type, or Instant Search</p>
         </div>
         <div class="flex items-center gap-2">
           <span id="filteredCallCountBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyanGlow border border-cyan-500/30">0 Records</span>
@@ -280,37 +250,48 @@
         </div>
       </div>
 
-      <!-- Filter Bar -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 bg-slate-900/70 p-3.5 rounded-xl border border-slate-800">
-        <div class="lg:col-span-2">
+      <!-- Enhanced Filter Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 bg-slate-900/70 p-3.5 rounded-xl border border-slate-800">
+        <!-- Search Input -->
+        <div class="sm:col-span-2 lg:col-span-2">
           <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1">Instant Search</label>
           <input type="text" id="searchInput" oninput="applyCallFilters()" placeholder="AVAYA ID, CSA Name, or MSISDN..." class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none" />
         </div>
+
+        <!-- Date Range: From Date -->
         <div>
-          <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1">From Date</label>
-          <input type="date" id="filterStartDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none" />
+          <label class="block text-[11px] uppercase tracking-wider text-cyanGlow mb-1 font-semibold">From Date</label>
+          <input type="date" id="filterStartDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none cursor-pointer" />
         </div>
+
+        <!-- Date Range: To Date -->
         <div>
-          <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1">To Date</label>
-          <input type="date" id="filterEndDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none" />
+          <label class="block text-[11px] uppercase tracking-wider text-cyanGlow mb-1 font-semibold">To Date</label>
+          <input type="date" id="filterEndDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none cursor-pointer" />
         </div>
+
+        <!-- Supervisor in Call -->
         <div>
           <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1">Supervisor in Call</label>
           <select id="filterSupervisor" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none">
             <option value="ALL">All Supervisors</option>
           </select>
         </div>
-        <div class="grid grid-cols-3 gap-1.5 lg:col-span-1">
-          <div>
-            <label class="block text-[10px] uppercase text-slate-400 mb-1">TL</label>
-            <select id="filterTL" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-1.5 py-2 text-xs text-white focus:outline-none">
-              <option value="ALL">All</option>
-            </select>
-          </div>
+
+        <!-- Team Leader -->
+        <div>
+          <label class="block text-[11px] uppercase tracking-wider text-slate-400 mb-1">Team Leader</label>
+          <select id="filterTL" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 focus:border-cyanGlow rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none">
+            <option value="ALL">All Team Leaders</option>
+          </select>
+        </div>
+
+        <!-- Skill & Call Type -->
+        <div class="grid grid-cols-2 gap-1.5">
           <div>
             <label class="block text-[10px] uppercase text-slate-400 mb-1">Skill</label>
             <select id="filterSkill" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-1.5 py-2 text-xs text-white focus:outline-none">
-              <option value="ALL">All</option>
+              <option value="ALL">All Skills</option>
             </select>
           </div>
           <div>
@@ -350,7 +331,7 @@
       <div id="callLogMobileCards" class="grid grid-cols-1 gap-3 md:hidden"></div>
     </section>
 
-    <!-- 4. AGENT PERFORMANCE & REPEAT CALLER TRACKER -->
+    <!-- 4. ASSOCIATE PERFORMANCE & REPEAT CALLER TRACKER (2 Tabs Only) -->
     <section class="cyber-card rounded-2xl p-5 space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
         <div>
@@ -358,23 +339,20 @@
             <span class="w-2.5 h-6 rounded bg-gradient-to-b from-neonViolet to-cyanGlow"></span>
             Associate Performance & Repeat MSISDN Intelligence
           </h3>
-          <p class="text-xs text-slate-400">Auto-matched with Alignment Roster for Tenure & Zero-Transfer tracking</p>
+          <p class="text-xs text-slate-400">Auto-matched with Alignment Roster for Tenure & Customer Repeat Escalation History</p>
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <button id="tabBtnTopAssoc" onclick="switchTrackerTab('topAssoc')" class="tab-active px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold transition">
+          <button id="tabBtnTopAssoc" onclick="switchTrackerTab('topAssoc')" class="tab-active px-4 py-2 rounded-xl border border-slate-700 text-xs font-bold transition">
             1. Top Transferring Associates
           </button>
-          <button id="tabBtnZeroStar" onclick="switchTrackerTab('zeroStar')" class="px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold text-slate-300 hover:border-cyanGlow transition">
-            2. Zero-Transfer Star List (<span id="zeroStarTabCount">0</span>)
-          </button>
-          <button id="tabBtnRepeatMsisdn" onclick="switchTrackerTab('repeatMsisdn')" class="px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold text-slate-300 hover:border-cyanGlow transition">
-            3. Repeat MSISDN Alert
+          <button id="tabBtnRepeatMsisdn" onclick="switchTrackerTab('repeatMsisdn')" class="px-4 py-2 rounded-xl border border-slate-700 text-xs font-bold text-slate-300 hover:border-cyanGlow transition">
+            2. Repeat MSISDN Alert
           </button>
         </div>
       </div>
 
-      <!-- Tab 1 -->
+      <!-- Tab 1: Top Transferring Associates -->
       <div id="tabPanelTopAssoc" class="space-y-3">
         <div class="overflow-x-auto rounded-xl border border-slate-800">
           <table class="w-full text-xs text-center">
@@ -395,40 +373,7 @@
         </div>
       </div>
 
-      <!-- Tab 2 -->
-      <div id="tabPanelZeroStar" class="hidden space-y-4">
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-          <div class="flex flex-wrap items-center gap-2">
-            <input type="text" id="zeroStarSearch" oninput="renderZeroTransferStars()" placeholder="Search Star Associate..." class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyanGlow w-64" />
-            <select id="zeroStarTLFilter" onchange="renderZeroTransferStars()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none">
-              <option value="ALL">All Team Leaders</option>
-            </select>
-            <select id="zeroStarLOBFilter" onchange="renderZeroTransferStars()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none">
-              <option value="ALL">All LOB / Skills</option>
-            </select>
-          </div>
-          <span class="text-xs text-emerald-400 font-semibold">★ 0 Supervisor Transfers</span>
-        </div>
-        <div class="overflow-x-auto max-h-96 rounded-xl border border-slate-800">
-          <table class="w-full text-xs text-center">
-            <thead class="sticky top-0 bg-slate-900">
-              <tr class="text-slate-300 border-b border-slate-800 uppercase text-[11px]">
-                <th class="py-3 px-3">#</th>
-                <th class="py-3 px-3">AVAYA ID</th>
-                <th class="py-3 px-3">Associate Name</th>
-                <th class="py-3 px-3">Supervisor / TL</th>
-                <th class="py-3 px-3">LOB / Skill</th>
-                <th class="py-3 px-3">GNX DOJ</th>
-                <th class="py-3 px-3">Tenure</th>
-                <th class="py-3 px-3">Status</th>
-              </tr>
-            </thead>
-            <tbody id="zeroStarTableBody" class="divide-y divide-slate-800/70"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tab 3 -->
+      <!-- Tab 2: Repeat MSISDN Alert -->
       <div id="tabPanelRepeatMsisdn" class="hidden space-y-3">
         <p class="text-xs text-slate-400">Click on any <strong class="text-cyanGlow">MSISDN number</strong> to inspect full call history.</p>
         <div class="overflow-x-auto rounded-xl border border-slate-800">
@@ -557,569 +502,6 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC EMBEDDED DIRECTLY TO AVOID 404 ERROR -->
-  <script>
-    const GITHUB_PAT = "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";
-    const GH_OWNER = "albatrosswings202509-dev";
-    const GH_REPO = "Supervisor-Call-Dashboard";
-    const GH_BRANCH = "main";
-
-    let appData = {
-      totalAlignedAssociates: 226,
-      supervisors: [
-        "Sattazit Gosh", "Sanjida Islam Tinny", "Mohammad Imam Hossain", 
-        "Fahad Hridoy", "Faria Sharmin Etu", "Mohammad Sabbir Hossain", 
-        "Nusrat Jahan Tamanna", "Kazi Md.Tareque", "Md Zahidul Islam Siam", 
-        "Md Ariful Islam Niloy", "Shajjadul Rhythm"
-      ],
-      calls: [
-        { date: "2026-11-01", msisdn: "1759018235", avaya: "115582", csaName: "Afroja Nusrat Prome", teamLeader: "Shajjadul Rhythm", skill: "Premium", supervisorInCall: "Sanjida Islam Tinny", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1711090068", avaya: "115388", csaName: "Umme tabassum", teamLeader: "Sattazit Gosh", skill: "Premium", supervisorInCall: "Sattazit Gosh", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1735779979", avaya: "112794", csaName: "Sharmin Akter Rima", teamLeader: "Md Ariful Islam Niloy", skill: "Premium", supervisorInCall: "Sanjida Islam Tinny", callType: "Outbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1797012128", avaya: "116247", csaName: "Aklima Sultana Mitu", teamLeader: "Nusrat Jahan Tamanna", skill: "Mass", supervisorInCall: "Sanjida Islam Tinny", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1751183895", avaya: "115916", csaName: "Mst Najnin Sultana Sifat", teamLeader: "Sanjida Islam Tinny", skill: "Mass", supervisorInCall: "Sattazit Gosh", callType: "Outbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1305759495", avaya: "115984", csaName: "Nirab Kanti Dey", teamLeader: "Mohammad Imam Hossain", skill: "Mass", supervisorInCall: "Sattazit Gosh", callType: "Outbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1318412729", avaya: "116160", csaName: "Jannatul Ferdous", teamLeader: "Nusrat Jahan Tamanna", skill: "Mass", supervisorInCall: "Sattazit Gosh", callType: "Outbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1713197668", avaya: "115550", csaName: "Rahatunnesa Mimsa", teamLeader: "Shajjadul Rhythm", skill: "Premium", supervisorInCall: "Sattazit Gosh", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1723019510", avaya: "115358", csaName: "Israt Jahan", teamLeader: "Sattazit Gosh", skill: "Premium", supervisorInCall: "Sanjida Islam Tinny", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1724116948", avaya: "116068", csaName: "Mahim Azad", teamLeader: "Mohammad Imam Hossain", skill: "Mass", supervisorInCall: "Mohammad Imam Hossain", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1712323015", avaya: "115886", csaName: "Avijit Paul", teamLeader: "Sattazit Gosh", skill: "Premium", supervisorInCall: "Sattazit Gosh", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1743985814", avaya: "116162", csaName: "Mahadi Hasan", teamLeader: "Mohammad Imam Hossain", skill: "Mass", supervisorInCall: "Mohammad Imam Hossain", callType: "Inbound", remarks: "" },
-        { date: "2026-11-01", msisdn: "1714620134", avaya: "116068", csaName: "Mahim Azad", teamLeader: "Mohammad Imam Hossain", skill: "Mass", supervisorInCall: "Mohammad Imam Hossain", callType: "Inbound", remarks: "" }
-      ],
-      alignment: [
-        { avaya: "111438", name: "Shamima Quader", doj: "2021-09-26", lob: "Outbound", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "112166", name: "Mitu Acharjee", doj: "2022-01-27", lob: "Retailer-456", supervisor: "Faria Sharmin Etu", status: "Active" },
-        { avaya: "112245", name: "Fatema Akter", doj: "2022-03-11", lob: "Live Chat", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "112252", name: "Moriom Akter Bristi", doj: "2022-03-29", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "112253", name: "Farjana Akter Nela", doj: "2022-03-29", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "112672", name: "Najbin Haider Eva", doj: "2022-09-28", "lob": "Premium", supervisor: "Md Ariful Islam Niloy", status: "Active" },
-        { avaya: "112752", name: "Md.Rahat Khan", doj: "2022-11-15", lob: "Premium", supervisor: "Md Ariful Islam Niloy", status: "Active" },
-        { avaya: "112732", name: "Papiya Barua", doj: "2022-11-10", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "112794", name: "Sharmin Akter Rima", doj: "2022-12-08", lob: "Premium", supervisor: "Md Ariful Islam Niloy", status: "Active" },
-        { avaya: "112860", name: "Fahima Akter", doj: "2023-01-01", lob: "Live Chat", supervisor: "Md Zahidul Islam Siam", status: "Active" },
-        { avaya: "112987", name: "Umaiya Un Nesa", doj: "2023-03-22", lob: "158", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "112989", name: "Iftahara Yousuf", doj: "2023-03-22", lob: "Live Chat", supervisor: "Md Zahidul Islam Siam", status: "Active" },
-        { avaya: "113045", name: "Shavab Afrin Sayma", doj: "2023-04-10", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "113088", name: "Sangita Nath", doj: "2023-05-03", lob: "Retailer-456", supervisor: "Faria Sharmin Etu", status: "Active" },
-        { avaya: "113297", name: "Joy Mazumder", doj: "2023-08-29", lob: "Retailer-456", supervisor: "Faria Sharmin Etu", status: "Active" },
-        { avaya: "113353", name: "Surma Akter", doj: "2023-09-17", lob: "Premium", supervisor: "Md Ariful Islam Niloy", status: "Active" },
-        { avaya: "113746", name: "Mithila Farjana", doj: "2024-02-06", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "113812", name: "Md Osama Fakro", doj: "2024-03-07", lob: "Outbound", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "113873", name: "Md. Kamrul Hasan Rajon", doj: "2024-04-09", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "113925", name: "Lata Das", doj: "2024-05-15", lob: "Retailer-456", supervisor: "Faria Sharmin Etu", status: "Active" },
-        { avaya: "114020", name: "Amena Akter", doj: "2024-07-02", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "114134", name: "Faisal Mahmood", doj: "2024-08-05", lob: "Retailer-456", supervisor: "Faria Sharmin Etu", status: "Active" },
-        { avaya: "114149", name: "Mehejabin Nishat Tamanna", doj: "2024-08-30", lob: "Live Chat", supervisor: "Md Zahidul Islam Siam", status: "Active" },
-        { avaya: "114150", name: "Fahima Akter", doj: "2024-08-30", lob: "158", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "114144", name: "Nazmul Rehela Tisha", doj: "2024-08-30", lob: "Premium", supervisor: "Md Ariful Islam Niloy", status: "Active" },
-        { avaya: "114373", name: "Sanzida Akter", doj: "2024-10-26", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "114508", name: "Fahmida Faiza", doj: "2025-01-26", lob: "158", supervisor: "Mohammad Sabbir Hossain", status: "Active" },
-        { avaya: "114519", name: "Habibur Rahaman Alve", doj: "2025-01-26", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "114504", name: "Reshma Akter", doj: "2025-01-26", lob: "Mass", supervisor: "Nusrat Jahan Tamanna", status: "Active" },
-        { avaya: "114524", name: "Shorov Barua Joy", doj: "2025-01-26", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "114660", name: "Nusrat Jahan Chayon", doj: "2025-02-13", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "114738", name: "Tanjida Akter", doj: "2025-03-20", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "115582", name: "Afroja Nusrat Prome", doj: "2025-07-15", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "115388", name: "Umme tabassum", doj: "2025-06-10", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "116247", name: "Aklima Sultana Mitu", doj: "2025-10-01", lob: "Mass", supervisor: "Nusrat Jahan Tamanna", status: "Active" },
-        { avaya: "115916", name: "Mst Najnin Sultana Sifat", doj: "2025-08-20", lob: "Mass", supervisor: "Sanjida Islam Tinny", status: "Active" },
-        { avaya: "115984", name: "Nirab Kanti Dey", doj: "2025-09-01", lob: "Mass", supervisor: "Mohammad Imam Hossain", status: "Active" },
-        { avaya: "116160", name: "Jannatul Ferdous", doj: "2025-09-18", lob: "Mass", supervisor: "Nusrat Jahan Tamanna", status: "Active" },
-        { avaya: "115550", name: "Rahatunnesa Mimsa", doj: "2025-07-12", lob: "Premium", supervisor: "Shajjadul Rhythm", status: "Active" },
-        { avaya: "115358", name: "Israt Jahan", doj: "2025-06-05", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "116068", name: "Mahim Azad", doj: "2025-09-10", lob: "Mass", supervisor: "Mohammad Imam Hossain", status: "Active" },
-        { avaya: "115886", name: "Avijit Paul", doj: "2025-08-14", lob: "Premium", supervisor: "Sattazit Gosh", status: "Active" },
-        { avaya: "116162", name: "Mahadi Hasan", doj: "2025-09-18", lob: "Mass", supervisor: "Mohammad Imam Hossain", status: "Active" }
-      ]
-    };
-
-    let supervisorMode = "monthly";
-    let tlChartInstance = null;
-    let trendChartInstance = null;
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      await syncData();
-    });
-
-    async function syncData() {
-      try {
-        const res = await fetch(`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/data.json?t=` + Date.now());
-        if (res.ok) {
-          const remoteData = await res.json();
-          if (remoteData && remoteData.calls) {
-            appData = remoteData;
-          }
-        }
-      } catch (err) {
-        console.warn("Using embedded default data", err);
-      }
-      initializeDateSelectors();
-      populateFilterDropdowns();
-      renderAll();
-    }
-
-    function initializeDateSelectors() {
-      const dates = [...new Set(appData.calls.map(c => c.date))].filter(Boolean).sort();
-      const latestDate = dates.length > 0 ? dates[dates.length - 1] : new Date().toISOString().slice(0, 10);
-      document.getElementById("activeDateSelect").value = latestDate;
-      document.getElementById("inputDate").value = new Date().toISOString().slice(0, 10);
-      document.getElementById("activeDateSelect").addEventListener("change", () => {
-        renderKPIs();
-        renderSupervisorLeaderboard();
-      });
-    }
-
-    function calculateTenure(dojStr) {
-      if (!dojStr || dojStr.includes("#")) return "N/A";
-      const doj = new Date(dojStr);
-      if (isNaN(doj.getTime())) return dojStr;
-      const now = new Date();
-      const diffDays = Math.max(0, Math.floor((now - doj) / (1000 * 60 * 60 * 24)));
-      const years = Math.floor(diffDays / 365);
-      const months = Math.floor((diffDays % 365) / 30);
-      if (years > 0) return `${years}y ${months}m`;
-      if (months > 0) return `${months}m`;
-      return `${diffDays} days`;
-    }
-
-    function findAgentMetadata(avaya, name) {
-      return appData.alignment.find(
-        a => String(a.avaya).trim() === String(avaya).trim() ||
-             (name && a.name.toLowerCase().trim() === name.toLowerCase().trim())
-      );
-    }
-
-    function renderAll() {
-      renderKPIs();
-      renderSupervisorLeaderboard();
-      renderTLImpactChart();
-      renderDailyTrendChart();
-      applyCallFilters();
-      renderTopAssociates();
-      renderZeroTransferStars();
-      renderRepeatMsisdn();
-    }
-
-    function renderKPIs() {
-      const calls = appData.calls;
-      const activeDate = document.getElementById("activeDateSelect").value;
-      const todayCalls = calls.filter(c => c.date === activeDate);
-
-      document.getElementById("kpiMtdCalls").textContent = calls.length;
-      document.getElementById("kpiTodayCalls").textContent = `${todayCalls.length} Calls (${activeDate})`;
-
-      const inboundCount = calls.filter(c => (c.callType || "").toLowerCase() === "inbound").length;
-      const outboundCount = calls.filter(c => (c.callType || "").toLowerCase() === "outbound").length;
-      const total = calls.length || 1;
-      const inPct = Math.round((inboundCount / total) * 100);
-      const outPct = 100 - inPct;
-
-      document.getElementById("kpiInboundPct").textContent = `${inPct}%`;
-      document.getElementById("kpiOutboundPct").textContent = `${outPct}%`;
-      document.getElementById("kpiInboundBar").style.width = `${inPct}%`;
-      document.getElementById("kpiOutboundBar").style.width = `${outPct}%`;
-      document.getElementById("kpiInboundCount").textContent = inboundCount;
-      document.getElementById("kpiOutboundCount").textContent = outboundCount;
-
-      const skillCounts = {};
-      calls.forEach(c => {
-        const sk = c.skill || "Other";
-        skillCounts[sk] = (skillCounts[sk] || 0) + 1;
-      });
-      ["Mass", "Premium", "Retailer-456", "Live Chat"].forEach(sk => { if (!(sk in skillCounts)) skillCounts[sk] = 0; });
-
-      document.getElementById("kpiSkillBreakdown").innerHTML = Object.entries(skillCounts)
-        .map(([skill, count]) => `
-          <div class="flex items-center justify-between bg-slate-900/90 px-2.5 py-1.5 rounded-lg border border-slate-800">
-            <span class="text-slate-300 font-medium truncate">${skill}</span>
-            <span class="font-bold text-cyanGlow">${count}</span>
-          </div>
-        `).join("");
-
-      const totalSups = appData.supervisors.length || 11;
-      const validMtdSups = new Set(calls.map(c => c.supervisorInCall).filter(s => s && s !== "#N/A" && s.trim() !== ""));
-      const validTodaySups = new Set(todayCalls.map(c => c.supervisorInCall).filter(s => s && s !== "#N/A" && s.trim() !== ""));
-
-      document.getElementById("kpiActiveSup").textContent = validMtdSups.size;
-      document.getElementById("kpiTotalSup").textContent = totalSups;
-      document.getElementById("kpiTodayActiveSup").textContent = `${validTodaySups.size} of ${totalSups} Active`;
-
-      const transferringSet = new Set(calls.map(c => String(c.avaya).trim()));
-      const totalRoster = appData.totalAlignedAssociates || appData.alignment.length || 226;
-      const zeroTransferCount = Math.max(0, totalRoster - transferringSet.size);
-      const zeroPct = ((zeroTransferCount / totalRoster) * 100).toFixed(1);
-
-      document.getElementById("kpiZeroTransferCount").textContent = zeroTransferCount;
-      document.getElementById("kpiTotalAgents").textContent = totalRoster;
-      document.getElementById("kpiZeroTransferPct").textContent = `${zeroPct}%`;
-    }
-
-    function setSupervisorMode(mode) {
-      supervisorMode = mode;
-      document.getElementById("supToggleMonthly").className = mode === "monthly" ? "px-2.5 py-1 rounded-md font-semibold bg-cyanGlow text-obsidian transition" : "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white transition";
-      document.getElementById("supToggleDaily").className = mode === "daily" ? "px-2.5 py-1 rounded-md font-semibold bg-cyanGlow text-obsidian transition" : "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white transition";
-      renderSupervisorLeaderboard();
-    }
-
-    function renderSupervisorLeaderboard() {
-      const activeDate = document.getElementById("activeDateSelect").value;
-      const sourceCalls = supervisorMode === "daily" ? appData.calls.filter(c => c.date === activeDate) : appData.calls;
-      const counts = {};
-      appData.supervisors.forEach(s => (counts[s] = 0));
-      sourceCalls.forEach(c => {
-        if (c.supervisorInCall && c.supervisorInCall !== "#N/A") {
-          counts[c.supervisorInCall] = (counts[c.supervisorInCall] || 0) + 1;
-        }
-      });
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      const maxVal = Math.max(1, sorted[0]?.[1] || 1);
-
-      document.getElementById("supervisorLeaderboardList").innerHTML = sorted.map(([name, count], idx) => `
-        <div class="p-2.5 rounded-xl bg-slate-900/75 border border-slate-800 space-y-1.5">
-          <div class="flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full text-[11px] font-extrabold flex items-center justify-center bg-slate-800 text-cyanGlow">${idx + 1}</span>
-              <span class="font-semibold text-slate-200">${name}</span>
-            </div>
-            <span class="font-extrabold text-cyanGlow">${count} calls</span>
-          </div>
-          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-cyanGlow to-neonViolet rounded-full" style="width: ${Math.round((count / maxVal) * 100)}%"></div>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function renderTLImpactChart() {
-      const tlCounts = {};
-      appData.calls.forEach(c => {
-        const tl = c.teamLeader || "Unassigned";
-        tlCounts[tl] = (tlCounts[tl] || 0) + 1;
-      });
-      const sorted = Object.entries(tlCounts).sort((a, b) => b[1] - a[1]);
-      const ctx = document.getElementById("tlImpactChart").getContext("2d");
-      if (tlChartInstance) tlChartInstance.destroy();
-
-      tlChartInstance = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: sorted.map(i => i[0]),
-          datasets: [{ data: sorted.map(i => i[1]), backgroundColor: "rgba(139, 92, 246, 0.75)", borderColor: "#00f2fe", borderWidth: 1, borderRadius: 4 }]
-        },
-        options: {
-          indexAxis: "y", responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148, 163, 184, 0.1)" } }, y: { ticks: { color: "#e2e8f0", font: { size: 10 } }, grid: { display: false } } }
-        }
-      });
-    }
-
-    function renderDailyTrendChart() {
-      const dateMap = {};
-      appData.calls.forEach(c => {
-        if (!c.date) return;
-        if (!dateMap[c.date]) dateMap[c.date] = { total: 0, inbound: 0, outbound: 0 };
-        dateMap[c.date].total++;
-        if ((c.callType || "").toLowerCase() === "inbound") dateMap[c.date].inbound++;
-        else dateMap[c.date].outbound++;
-      });
-      const dates = Object.keys(dateMap).sort();
-      const ctx = document.getElementById("dailyTrendChart").getContext("2d");
-      if (trendChartInstance) trendChartInstance.destroy();
-
-      trendChartInstance = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: dates,
-          datasets: [
-            { label: "Total", data: dates.map(d => dateMap[d].total), borderColor: "#00f2fe", backgroundColor: "rgba(0,242,254,0.1)", fill: true, tension: 0.3 },
-            { label: "Inbound", data: dates.map(d => dateMap[d].inbound), borderColor: "#8b5cf6", borderDash: [4, 4], tension: 0.3 },
-            { label: "Outbound", data: dates.map(d => dateMap[d].outbound), borderColor: "#10b981", tension: 0.3 }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: "#cbd5e1", boxWidth: 10, font: { size: 10 } } } },
-          scales: { x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.1)" } }, y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.1)" } } }
-        }
-      });
-    }
-
-    function populateFilterDropdowns() {
-      const sups = [...new Set([...appData.supervisors, ...appData.calls.map(c => c.supervisorInCall)])].filter(Boolean);
-      const tls = [...new Set([...appData.alignment.map(a => a.supervisor), ...appData.calls.map(c => c.teamLeader)])].filter(Boolean);
-      const skills = [...new Set([...appData.alignment.map(a => a.lob), ...appData.calls.map(c => c.skill)])].filter(Boolean);
-
-      fillSelect("filterSupervisor", sups, "All Supervisors");
-      fillSelect("filterTL", tls, "All");
-      fillSelect("filterSkill", skills, "All");
-      fillSelect("zeroStarTLFilter", tls, "All Team Leaders");
-      fillSelect("zeroStarLOBFilter", skills, "All LOB / Skills");
-    }
-
-    function fillSelect(id, items, defaultLabel) {
-      const el = document.getElementById(id);
-      if(!el) return;
-      const currentVal = el.value || "ALL";
-      el.innerHTML = `<option value="ALL">${defaultLabel}</option>` + items.map(i => `<option value="${i}">${i}</option>`).join("");
-      el.value = items.includes(currentVal) ? currentVal : "ALL";
-    }
-
-    function applyCallFilters() {
-      const q = (document.getElementById("searchInput").value || "").toLowerCase().trim();
-      const start = document.getElementById("filterStartDate").value;
-      const end = document.getElementById("filterEndDate").value;
-      const sup = document.getElementById("filterSupervisor").value;
-      const tl = document.getElementById("filterTL").value;
-      const skill = document.getElementById("filterSkill").value;
-      const type = document.getElementById("filterCallType").value;
-
-      const filtered = appData.calls.filter(c => {
-        const matchQ = !q || String(c.avaya).toLowerCase().includes(q) || (c.csaName || "").toLowerCase().includes(q) || String(c.msisdn).toLowerCase().includes(q);
-        const matchStart = !start || c.date >= start;
-        const matchEnd = !end || c.date <= end;
-        const matchSup = sup === "ALL" || c.supervisorInCall === sup;
-        const matchTL = tl === "ALL" || c.teamLeader === tl;
-        const matchSkill = skill === "ALL" || c.skill === skill;
-        const matchType = type === "ALL" || (c.callType || "").toLowerCase() === type.toLowerCase();
-        return matchQ && matchStart && matchEnd && matchSup && matchTL && matchSkill && matchType;
-      });
-
-      document.getElementById("filteredCallCountBadge").textContent = `${filtered.length} Records`;
-      renderCallLogViews(filtered);
-    }
-
-    function resetCallFilters() {
-      document.getElementById("searchInput").value = "";
-      document.getElementById("filterStartDate").value = "";
-      document.getElementById("filterEndDate").value = "";
-      document.getElementById("filterSupervisor").value = "ALL";
-      document.getElementById("filterTL").value = "ALL";
-      document.getElementById("filterSkill").value = "ALL";
-      document.getElementById("filterCallType").value = "ALL";
-      applyCallFilters();
-    }
-
-    function renderCallLogViews(calls) {
-      const tbody = document.getElementById("callLogTableBody");
-      const mobileContainer = document.getElementById("callLogMobileCards");
-      if (calls.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="py-6 text-slate-400">No calls found</td></tr>`;
-        mobileContainer.innerHTML = `<div class="p-4 text-center text-slate-400">No calls found</div>`;
-        return;
-      }
-
-      tbody.innerHTML = calls.map((c, idx) => {
-        const agent = findAgentMetadata(c.avaya, c.csaName);
-        return `
-          <tr class="hover:bg-slate-900/60 transition">
-            <td class="py-2.5 px-3 text-slate-400">${idx + 1}</td>
-            <td class="py-2.5 px-3 text-slate-200">${c.date}</td>
-            <td class="py-2.5 px-3 font-bold text-cyanGlow"><button onclick="openMsisdnModal('${c.msisdn}')">${c.msisdn}</button></td>
-            <td class="py-2.5 px-3 font-mono text-slate-300">${c.avaya}</td>
-            <td class="py-2.5 px-3 font-semibold text-white">${c.csaName}</td>
-            <td class="py-2.5 px-3 text-slate-400">${agent ? calculateTenure(agent.doj) : 'N/A'}</td>
-            <td class="py-2.5 px-3 text-slate-300">${c.teamLeader}</td>
-            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800">${c.skill}</span></td>
-            <td class="py-2.5 px-3 text-neonViolet font-semibold">${c.supervisorInCall}</td>
-            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded border text-[10px] ${c.callType === 'Inbound' ? 'text-cyan-400 border-cyan-500/30' : 'text-purple-400 border-purple-500/30'}">${c.callType}</span></td>
-            <td class="py-2.5 px-3 text-slate-400">${c.remarks || "-"}</td>
-          </tr>
-        `;
-      }).join("");
-
-      mobileContainer.innerHTML = calls.map(c => `
-        <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
-          <div class="flex justify-between items-center">
-            <button onclick="openMsisdnModal('${c.msisdn}')" class="font-extrabold text-cyanGlow">${c.msisdn}</button>
-            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">${c.callType}</span>
-          </div>
-          <div><strong>CSA:</strong> ${c.csaName} (${c.avaya}) | <strong>TL:</strong> ${c.teamLeader}</div>
-          <div><strong>Supervisor:</strong> <span class="text-neonViolet">${c.supervisorInCall}</span></div>
-          <div class="text-[10px] text-slate-400 flex justify-between pt-1 border-t border-slate-800"><span>${c.date}</span><span>${c.skill}</span></div>
-        </div>
-      `).join("");
-    }
-
-    function switchTrackerTab(tab) {
-      ['TopAssoc', 'ZeroStar', 'RepeatMsisdn'].forEach(t => {
-        const key = t.charAt(0).toLowerCase() + t.slice(1);
-        document.getElementById(`tabBtn${t}`).className = key === tab ? "tab-active px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold transition" : "px-3.5 py-2 rounded-xl border border-slate-700 text-xs font-bold text-slate-300 hover:border-cyanGlow transition";
-        document.getElementById(`tabPanel${t}`).classList.toggle("hidden", key !== tab);
-      });
-    }
-
-    function renderTopAssociates() {
-      const map = {};
-      appData.calls.forEach(c => {
-        const key = String(c.avaya || c.csaName).trim();
-        if (!map[key]) {
-          const meta = findAgentMetadata(c.avaya, c.csaName);
-          map[key] = { avaya: c.avaya, name: c.csaName, teamLeader: c.teamLeader || (meta?.supervisor || ""), skill: c.skill || (meta?.lob || ""), doj: meta?.doj || "N/A", count: 0 };
-        }
-        map[key].count++;
-      });
-      const sorted = Object.values(map).sort((a, b) => b.count - a.count);
-      document.getElementById("topAssociatesBody").innerHTML = sorted.map((a, idx) => `
-        <tr class="hover:bg-slate-900/60 transition">
-          <td class="py-2.5 px-3 font-bold text-cyanGlow">#${idx + 1}</td>
-          <td class="py-2.5 px-3 font-mono text-slate-300">${a.avaya}</td>
-          <td class="py-2.5 px-3 font-bold text-white">${a.name}</td>
-          <td class="py-2.5 px-3 text-slate-300">${a.teamLeader}</td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800">${a.skill}</span></td>
-          <td class="py-2.5 px-3 text-slate-400">${a.doj}</td>
-          <td class="py-2.5 px-3 text-emerald-400">${calculateTenure(a.doj)}</td>
-          <td class="py-2.5 px-3 font-extrabold text-neonViolet">${a.count}</td>
-        </tr>
-      `).join("");
-    }
-
-    function renderZeroTransferStars() {
-      const transferred = new Set(appData.calls.map(c => String(c.avaya).trim()));
-      const q = (document.getElementById("zeroStarSearch").value || "").toLowerCase().trim();
-      const tlFilter = document.getElementById("zeroStarTLFilter").value;
-      const lobFilter = document.getElementById("zeroStarLOBFilter").value;
-
-      const stars = appData.alignment.filter(a => !transferred.has(String(a.avaya).trim()));
-      document.getElementById("zeroStarTabCount").textContent = stars.length;
-
-      const filtered = stars.filter(a => {
-        const matchQ = !q || a.name.toLowerCase().includes(q) || String(a.avaya).toLowerCase().includes(q);
-        const matchTL = tlFilter === "ALL" || a.supervisor === tlFilter;
-        const matchLOB = lobFilter === "ALL" || a.lob === lobFilter;
-        return matchQ && matchTL && matchLOB;
-      });
-
-      document.getElementById("zeroStarTableBody").innerHTML = filtered.map((a, idx) => `
-        <tr class="hover:bg-slate-900/60 transition">
-          <td class="py-2.5 px-3 text-slate-400">${idx + 1}</td>
-          <td class="py-2.5 px-3 font-mono text-cyanGlow">${a.avaya}</td>
-          <td class="py-2.5 px-3 font-semibold text-white">${a.name}</td>
-          <td class="py-2.5 px-3 text-slate-300">${a.supervisor}</td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800">${a.lob}</span></td>
-          <td class="py-2.5 px-3 text-slate-400">${a.doj}</td>
-          <td class="py-2.5 px-3 text-slate-300">${calculateTenure(a.doj)}</td>
-          <td class="py-2.5 px-3 text-emerald-400 font-bold">★ 0 Transfers</td>
-        </tr>
-      `).join("");
-    }
-
-    function renderRepeatMsisdn() {
-      const map = {};
-      appData.calls.forEach(c => {
-        const m = String(c.msisdn).trim();
-        if (!m) return;
-        if (!map[m]) map[m] = { msisdn: m, count: 0, lastDate: c.date, lastSup: c.supervisorInCall };
-        map[m].count++;
-        if (c.date >= map[m].lastDate) { map[m].lastDate = c.date; map[m].lastSup = c.supervisorInCall; }
-      });
-      const sorted = Object.values(map).sort((a, b) => b.count - a.count).slice(0, 15);
-      document.getElementById("repeatMsisdnBody").innerHTML = sorted.map((item, idx) => `
-        <tr class="hover:bg-slate-900/60 transition">
-          <td class="py-2.5 px-3 font-bold text-slate-400">#${idx + 1}</td>
-          <td class="py-2.5 px-3 font-extrabold text-cyanGlow"><button onclick="openMsisdnModal('${item.msisdn}')">${item.msisdn}</button></td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">${item.count}</span></td>
-          <td class="py-2.5 px-3 text-slate-300">${item.lastDate}</td>
-          <td class="py-2.5 px-3 text-neonViolet font-semibold">${item.lastSup}</td>
-          <td class="py-2.5 px-3"><button onclick="openMsisdnModal('${item.msisdn}')" class="px-2.5 py-1 rounded bg-cyan-500/15 text-cyanGlow text-[10px] font-bold">History</button></td>
-        </tr>
-      `).join("");
-    }
-
-    function openMsisdnModal(msisdn) {
-      const matches = appData.calls.filter(c => String(c.msisdn).trim() === String(msisdn).trim());
-      document.getElementById("modalMsisdnTitle").textContent = msisdn;
-      document.getElementById("msisdnHistoryList").innerHTML = matches.map((c, i) => `
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center">
-          <div>
-            <span class="text-cyanGlow font-bold">#${i + 1} • ${c.date}</span>
-            <p class="text-white font-semibold">CSA: ${c.csaName} (${c.avaya}) | TL: ${c.teamLeader}</p>
-          </div>
-          <div class="text-right">
-            <span class="text-neonViolet font-bold">Supervisor: ${c.supervisorInCall}</span>
-            <p class="text-slate-400 text-[10px]">${c.callType} • ${c.skill}</p>
-          </div>
-        </div>
-      `).join("");
-      document.getElementById("msisdnModal").classList.remove("hidden");
-    }
-
-    function closeMsisdnModal() { document.getElementById("msisdnModal").classList.add("hidden"); }
-    function openAddCallModal() { document.getElementById("addCallModal").classList.remove("hidden"); }
-    function closeAddCallModal() { document.getElementById("addCallModal").classList.add("hidden"); document.getElementById("submitStatusMsg").classList.add("hidden"); }
-
-    function autoFillAgentByAvaya(val) {
-      const agent = appData.alignment.find(a => String(a.avaya).trim() === String(val).trim());
-      if (agent) {
-        document.getElementById("inputCsaName").value = agent.name;
-        document.getElementById("inputTeamLeader").value = agent.supervisor;
-        if (agent.lob) document.getElementById("inputSkill").value = agent.lob;
-      }
-    }
-
-    async function submitNewCall(e) {
-      e.preventDefault();
-      const newCall = {
-        date: document.getElementById("inputDate").value,
-        msisdn: document.getElementById("inputMsisdn").value.trim(),
-        avaya: document.getElementById("inputAvaya").value.trim(),
-        csaName: document.getElementById("inputCsaName").value.trim(),
-        teamLeader: document.getElementById("inputTeamLeader").value.trim(),
-        skill: document.getElementById("inputSkill").value,
-        supervisorInCall: document.getElementById("inputSupervisorInCall").value,
-        callType: document.getElementById("inputCallType").value,
-        remarks: document.getElementById("inputRemarks").value.trim()
-      };
-
-      const statusEl = document.getElementById("submitStatusMsg");
-      statusEl.classList.remove("hidden");
-      statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-cyan-500/20 text-cyanGlow";
-      statusEl.textContent = "Pushing data directly to GitHub...";
-
-      appData.calls.unshift(newCall);
-      renderAll();
-
-      try {
-        const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/data.json`;
-        
-        // Get SHA
-        const getRes = await fetch(`${apiUrl}?ref=${GH_BRANCH}`, {
-          headers: { "Authorization": `Bearer ${GITHUB_PAT}`, "Accept": "application/vnd.github+json" }
-        });
-        let sha = null;
-        if (getRes.ok) {
-          const meta = await getRes.json();
-          sha = meta.sha;
-        }
-
-        const jsonString = JSON.stringify(appData, null, 2);
-        const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
-        const putRes = await fetch(apiUrl, {
-          method: "PUT",
-          headers: { "Authorization": `Bearer ${GITHUB_PAT}`, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
-          body: JSON.stringify({ message: `Add new call via web UI: ${newCall.msisdn}`, content: base64Content, branch: GH_BRANCH, sha: sha })
-        });
-
-        if (putRes.ok) {
-          statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-emerald-500/20 text-emerald-400";
-          statusEl.textContent = "✓ Successfully saved & pushed to GitHub!";
-        } else {
-          throw new Error("GitHub API push failed");
-        }
-      } catch (err) {
-        statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-amber-500/20 text-amber-400";
-        statusEl.textContent = "Added locally, but GitHub sync encountered an error.";
-      }
-
-      setTimeout(() => { closeAddCallModal(); }, 1500);
-    }
-
-    function toggleTheme() {
-      document.documentElement.classList.toggle("dark");
-      document.body.classList.toggle("dark");
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
