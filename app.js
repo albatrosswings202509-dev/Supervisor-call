@@ -1,11 +1,12 @@
 /**
- * SUPERVISOR CALL ANALYTICS - ENGINE
- * Features: Instant UI Update, Perfect Date Filter, localStorage Cache
+ * SUPERVISOR CALL ANALYTICS - ENGINE (app.js)
+ * Live Caching + Perfect Date Filtering + Timezone Fix
  */
+const GITHUB_PAT = "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";
 const GH_OWNER = "albatrosswings202509-dev";
 const GH_REPO = "Supervisor-call"; 
 const GH_BRANCH = "main";
-// Eikhane URL Obosshoi Diben!
+// Eikhane URL Obosshoi Diben, taholei data sathe sathe update hobe!
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK_0Wf_KIqWOW9isOnuFSSIRbDuJSte6i1QPATz4zWirj4Z62WzaTKvbGrOiY6UJk7mQ/exec"; 
 
 let appData = {
@@ -19,15 +20,32 @@ let supervisorMode = "monthly";
 let trendChartType = "line"; 
 let tlChartInstance = null; let trendChartInstance = null;
 
+// DATE FIX: Timezone -1 Day Issue Fixed
 function normalizeDate(raw) {
-  if (!raw) return ""; const s = String(raw).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-  const d = new Date(s); if (!isNaN(d.getTime())) return d.toISOString().slice(0, 10);
+  if (!raw) return ""; 
+  const s = String(raw).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s; // Already YYYY-MM-DD
+  
+  const d = new Date(s); 
+  if (!isNaN(d.getTime())) {
+    // Exact Local Date extract kora hocche jate UTC te -1 din na pichiye jay
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
   return s.slice(0, 10);
 }
 
+function getTodayDateStr() {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. INSTANT LOAD FROM CACHE (NO DELAY)
   const cachedData = localStorage.getItem("supervisorAppCache");
   if (cachedData) {
     try { 
@@ -39,17 +57,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   document.getElementById("activeDateSelect").onchange = () => { renderKPIs(); renderSupervisorLeaderboard(); };
   
-  // 2. BACKGROUND FETCH FOR NEWEST DATA
+  // Background real-time fetch
   await syncData(false);
 });
 
 async function syncData(manual = false) {
-  const syncIndicator = document.getElementById("syncIndicator");
-  if (syncIndicator) syncIndicator.className = "w-2 h-2 rounded-full bg-cyanGlow animate-ping";
-  
+  const syncDot = document.getElementById("syncIndicator");
+  const syncText = document.getElementById("lastSyncText");
+  if (syncDot) syncDot.className = "w-2 h-2 rounded-full bg-cyanGlow animate-ping";
+  if (syncText) syncText.textContent = "Syncing with live server...";
+
   let loaded = false;
 
-  // Best: Fetch from Apps Script (Directly from Sheet)
+  // 1. APP SCRIPT is the fastest live data
   if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://script.google.com/")) {
     try {
       const gsRes = await fetch(APPS_SCRIPT_URL + "?action=getData&t=" + Date.now());
@@ -57,7 +77,7 @@ async function syncData(manual = false) {
     } catch (e) {}
   }
 
-  // Fallback: GitHub JSON
+  // 2. GITHUB RAW 
   if (!loaded) {
     try {
       const ghRes = await fetch(`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/data.json?t=` + Date.now());
@@ -71,14 +91,21 @@ async function syncData(manual = false) {
     initializeDateSelectors(); populateFilterDropdowns(); renderAll();
   }
 
-  if (syncIndicator) syncIndicator.className = "w-2 h-2 rounded-full bg-emerald-400";
+  const nowStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  if (syncDot) syncDot.className = "w-2 h-2 rounded-full bg-emerald-400";
+  if (syncText) syncText.textContent = loaded ? `Live Synced (${nowStr})` : `Ready`;
 }
 
 function initializeDateSelectors() {
   const dates = [...new Set((appData.calls || []).map(c => c.date))].filter(Boolean).sort();
-  const latest = dates.length > 0 ? dates[dates.length - 1] : "";
-  const act = document.getElementById("activeDateSelect"); if (act && !act.value) act.value = latest;
-  const inp = document.getElementById("inputDate"); if (inp && !inp.value) inp.value = latest;
+  const latest = dates.length > 0 ? dates[dates.length - 1] : getTodayDateStr();
+  
+  const act = document.getElementById("activeDateSelect"); 
+  if (act && !act.value) act.value = latest;
+  
+  // FIX: Make sure Add Call defaults to EXACT TODAY
+  const inp = document.getElementById("inputDate"); 
+  if (inp && !inp.value) inp.value = getTodayDateStr();
 }
 
 function calculateTenure(dojStr) {
@@ -94,9 +121,6 @@ function renderAll() {
   applyCallFilters(); renderTopAssociates(); renderRepeatMsisdn();
 }
 
-// ----------------------------------------------------
-// KPIs & CHARTS
-// ----------------------------------------------------
 function renderKPIs() {
   const calls = appData.calls || [];
   const activeDate = document.getElementById("activeDateSelect").value;
@@ -188,9 +212,6 @@ function renderDailyTrendChart() {
   });
 }
 
-// ----------------------------------------------------
-// DATE FILTER FIX LOGIC
-// ----------------------------------------------------
 function populateFilterDropdowns() {
   const s = [...new Set((appData.calls||[]).map(c=>c.supervisorInCall))].filter(x=>x&&x!=="#N/A");
   const t = [...new Set((appData.calls||[]).map(c=>c.teamLeader))].filter(Boolean);
@@ -203,7 +224,7 @@ function populateFilterDropdowns() {
 
 function applyCallFilters() {
   const q = document.getElementById("searchInput").value.toLowerCase().trim();
-  const eD = document.getElementById("filterExactDate").value; // e.g. "2026-11-01"
+  const eD = document.getElementById("filterExactDate").value; 
   const sD = document.getElementById("filterStartDate").value;
   const enD = document.getElementById("filterEndDate").value;
   const sup = document.getElementById("filterSupervisor").value;
@@ -215,11 +236,9 @@ function applyCallFilters() {
     const d = c.date;
     const mQ = !q || String(c.avaya).includes(q) || String(c.csaName).toLowerCase().includes(q) || String(c.msisdn).includes(q);
     
-    // DATE FILTER LOGIC
     let mDate = true;
-    if (eD) {
-      mDate = (d === eD); 
-    } else {
+    if (eD) { mDate = (d === eD); } 
+    else {
       if (sD && d < sD) mDate = false;
       if (enD && d > enD) mDate = false;
     }
@@ -247,9 +266,6 @@ function resetCallFilters() {
   applyCallFilters();
 }
 
-// ----------------------------------------------------
-// TABS & MODALS
-// ----------------------------------------------------
 function switchTrackerTab(t) {
   document.getElementById("tabBtnTopAssoc").className = t==="topAssoc" ? "tab-active px-4 py-1.5 rounded-lg text-xs font-bold border border-slate-700" : "px-4 py-1.5 rounded-lg text-xs border border-slate-700 text-slate-400 hover:text-cyanGlow";
   document.getElementById("tabBtnRepeatMsisdn").className = t==="repeatMsisdn" ? "tab-active px-4 py-1.5 rounded-lg text-xs font-bold border border-slate-700" : "px-4 py-1.5 rounded-lg text-xs border border-slate-700 text-slate-400 hover:text-cyanGlow";
@@ -295,7 +311,10 @@ function openMsisdnModal(m) {
   document.getElementById("msisdnModal").classList.remove("hidden");
 }
 function closeMsisdnModal() { document.getElementById("msisdnModal").classList.add("hidden"); }
-function openAddCallModal() { document.getElementById("addCallModal").classList.remove("hidden"); }
+function openAddCallModal() { 
+  document.getElementById("inputDate").value = getTodayDateStr(); // Set Default exactly to today's date
+  document.getElementById("addCallModal").classList.remove("hidden"); 
+}
 function closeAddCallModal() { document.getElementById("addCallModal").classList.add("hidden"); document.getElementById("submitStatusMsg").classList.add("hidden"); }
 
 function autoFillAgentByAvaya(v) {
@@ -303,16 +322,17 @@ function autoFillAgentByAvaya(v) {
   if(a) { document.getElementById("inputCsaName").value=a.name; document.getElementById("inputTeamLeader").value=a.supervisor; document.getElementById("inputSkill").value=a.lob; }
 }
 
-// ----------------------------------------------------
-// IMMEDIATE UPDATE LOGIC (MAGIC FIX)
-// ----------------------------------------------------
 async function submitNewCall(e) {
   e.preventDefault();
   const nc = {
-    date: document.getElementById("inputDate").value, msisdn: document.getElementById("inputMsisdn").value,
-    avaya: document.getElementById("inputAvaya").value, csaName: document.getElementById("inputCsaName").value,
-    teamLeader: document.getElementById("inputTeamLeader").value, skill: document.getElementById("inputSkill").value,
-    supervisorInCall: document.getElementById("inputSupervisorInCall").value, callType: document.getElementById("inputCallType").value,
+    date: normalizeDate(document.getElementById("inputDate").value), 
+    msisdn: document.getElementById("inputMsisdn").value,
+    avaya: document.getElementById("inputAvaya").value, 
+    csaName: document.getElementById("inputCsaName").value,
+    teamLeader: document.getElementById("inputTeamLeader").value, 
+    skill: document.getElementById("inputSkill").value,
+    supervisorInCall: document.getElementById("inputSupervisorInCall").value, 
+    callType: document.getElementById("inputCallType").value,
     remarks: document.getElementById("inputRemarks").value
   };
   
@@ -320,16 +340,14 @@ async function submitNewCall(e) {
   msg.className = "text-xs p-2 rounded bg-cyan-900 text-cyanGlow mt-2"; msg.textContent = "Syncing instantly...";
   const btn = document.getElementById("submitCallBtn"); btn.disabled = true;
 
-  // 1. UPDATE UI INSTANTLY (No delay at all)
+  // UPDATE UI INSTANTLY
   appData.calls.unshift(nc); 
-  
-  // 2. SAVE TO BROWSER CACHE (So if page refreshes before github finishes, data stays!)
   localStorage.setItem("supervisorAppCache", JSON.stringify(appData));
   
   document.getElementById("activeDateSelect").value = nc.date;
-  renderAll(); // Screen updates instantly
+  renderAll(); 
 
-  // 3. PUSH TO GOOGLE SHEET & GITHUB IN BACKGROUND
+  // PUSH TO GOOGLE SHEET & GITHUB
   try {
     if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
       await fetch(APPS_SCRIPT_URL, {
@@ -346,7 +364,7 @@ async function submitNewCall(e) {
     msg.textContent = "Added locally. Background sync error.";
   }
   
-  setTimeout(() => { document.getElementById("addCallForm").reset(); document.getElementById("inputDate").value = nc.date; closeAddCallModal(); btn.disabled = false; }, 1500);
+  setTimeout(() => { document.getElementById("addCallForm").reset(); closeAddCallModal(); btn.disabled = false; }, 1500);
 }
 
 function toggleTheme() { document.documentElement.classList.toggle("dark"); document.body.classList.toggle("dark"); }
