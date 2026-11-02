@@ -1,246 +1,771 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisor Call Analytics | Live Sync</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-base: #0a0e1a;
-            --bg-card: rgba(18, 24, 38, 0.85);
-            --border-glow: rgba(0, 242, 254, 0.25);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --cyan: #00f2fe;
-            --violet: #8b5cf6;
-            --blue: #3b82f6;
-            --success: #10b981;
-            --danger: #f43f5e;
-        }
+/**
+ * CONFIGURATION:
+ * Paste your deployed Google Apps Script Web App URL here for instant 2-way sync.
+ */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK_0Wf_KIqWOW9isOnuFSSIRbDuJSte6i1QPATz4zWirj4Z62WzaTKvbGrOiY6UJk7mQ/exec";
+const AUTO_REFRESH_INTERVAL_MS = 30000; // Auto-sync every 30 seconds
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-base); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
+let appData = {
+  totalAlignedAssociates: 226,
+  supervisors: [],
+  calls: [],
+  alignment: []
+};
 
-        /* Sidebar */
-        aside { width: 260px; background: rgba(10, 14, 26, 0.95); border-right: 1px solid var(--border-glow); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
-        .brand { padding: 24px; font-size: 1.1rem; font-weight: 700; color: var(--cyan); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .nav-links { list-style: none; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; }
-        .nav-links li { padding: 12px 16px; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
-        .nav-links li:hover, .nav-links li.active { background: linear-gradient(90deg, rgba(0, 242, 254, 0.15), transparent); color: var(--cyan); border-left: 3px solid var(--cyan); }
+let supervisorMode = "monthly"; // 'monthly' | 'daily'
+let tlChartInstance = null;
+let trendChartInstance = null;
 
-        /* Main Content */
-        main { margin-left: 260px; flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 25px; }
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 18px 25px; border-radius: 16px; border: 1px solid var(--border-glow); backdrop-filter: blur(12px); }
-        .header-title h1 { font-size: 1.4rem; font-weight: 700; color: #fff; }
-        .header-title p { font-size: 0.85rem; color: var(--text-muted); }
-        .header-actions { display: flex; gap: 15px; align-items: center; }
-        .btn-live { background: rgba(0, 242, 254, 0.1); border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-live:hover { background: var(--cyan); color: #000; }
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadInitialData();
+  // Poll Google Sheet every 30s for real-time updates
+  setInterval(() => syncFromGoogleSheet(false), AUTO_REFRESH_INTERVAL_MS);
+});
 
-        /* KPI Cards Grid */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .kpi-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
-        .kpi-card::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--cyan); }
-        .kpi-title { font-size: 0.85rem; color: var(--text-muted); }
-        .kpi-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
-        .kpi-sub { font-size: 0.75rem; color: var(--success); }
+// 1. Load fast local data.json first, then fetch live Google Sheet data
+async function loadInitialData() {
+  try {
+    const res = await fetch("./data.json?t=" + Date.now());
+    if (res.ok) {
+      appData = await res.json();
+      initializeDateSelectors();
+      populateFilterDropdowns();
+      renderAll();
+    }
+  } catch (err) {
+    console.warn("Local data.json load fallback:", err);
+  }
+  // Immediately check live Google Sheet if URL is configured
+  await syncFromGoogleSheet(false);
+}
 
-        /* Charts Section */
-        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .chart-box { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 16px; padding: 22px; backdrop-filter: blur(10px); }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .chart-header h3 { font-size: 1rem; font-weight: 600; color: #fff; }
-        .canvas-container { position: relative; height: 280px; width: 100%; }
+// 2. Live Fetch from Google Sheet (Apps Script doGet)
+async function syncFromGoogleSheet(manualTrigger = false) {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
+    if (manualTrigger) {
+      alert("Please set your Google Apps Script Web App URL in app.js (line 5) to enable live two-way Sheet sync.");
+    }
+    return;
+  }
 
-        /* Tables */
-        .tables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .data-table th, .data-table td { padding: 12px 14px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .data-table th { color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.02); }
-        .data-table tr:hover { background: rgba(0, 242, 254, 0.03); }
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-        .badge.inbound { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .badge.outbound { background: rgba(244, 63, 94, 0.15); color: var(--danger); }
+  const syncDot = document.getElementById("syncIndicator");
+  const syncText = document.getElementById("lastSyncText");
+  try {
+    syncDot.className = "inline-block w-2 h-2 rounded-full bg-cyanGlow animate-ping";
+    syncText.textContent = "Syncing with Sheet...";
 
-        /* Modal Popup Styling */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: #121826; border: 1px solid var(--cyan); padding: 30px; border-radius: 16px; width: 450px; display: flex; flex-direction: column; gap: 15px; }
-        .modal-content h3 { color: var(--cyan); margin-bottom: 5px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group label { font-size: 0.8rem; color: var(--text-muted); }
-        .form-group input, .form-group select { background: #0a0e1a; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.9rem; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-        .btn-submit { background: var(--cyan); color: #000; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    const response = await fetch(APPS_SCRIPT_URL + "?action=getData&t=" + Date.now());
+    const liveData = await response.json();
 
-        @media(max-width: 1024px) {
-            .charts-grid, .tables-grid { grid-template-columns: 1fr; }
-            aside { width: 70px; }
-            aside .brand span, aside .nav-links span { display: none; }
-            main { margin-left: 70px; }
-        }
-    </style>
-</head>
-<body>
+    if (liveData && Array.isArray(liveData.calls)) {
+      appData.calls = liveData.calls;
+      if (Array.isArray(liveData.alignment) && liveData.alignment.length > 0) {
+        appData.alignment = liveData.alignment;
+        appData.totalAlignedAssociates = liveData.alignment.length;
+      }
+      if (Array.isArray(liveData.supervisors) && liveData.supervisors.length > 0) {
+        appData.supervisors = liveData.supervisors;
+      }
+      populateFilterDropdowns();
+      renderAll();
 
-    <!-- Sidebar -->
-    <aside>
-        <div class="brand">⚡ <span>CyberCall</span></div>
-        <ul class="nav-links">
-            <li class="active">📊 <span>Overview</span></li>
-            <li onclick="alert('Switching to Call Log view')">📞 <span>Call Details</span></li>
-            <li onclick="alert('Switching to Supervisors view')">👑 <span>Supervisors</span></li>
-        </ul>
-    </aside>
+      const nowStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      syncDot.className = "inline-block w-2 h-2 rounded-full bg-emerald-400";
+      syncText.textContent = `Live Synced at ${nowStr}`;
+    }
+  } catch (error) {
+    console.error("Live sync error:", error);
+    syncDot.className = "inline-block w-2 h-2 rounded-full bg-amber-400";
+    syncText.textContent = "Using cached data.json";
+  }
+}
 
-    <!-- Main Content -->
-    <main>
-        <header>
-            <div class="header-title">
-                <h1>Supervisor Call Analytics Dashboard</h1>
-                <p>Real-time Google Sheet Live Sync & Call Logging</p>
-            </div>
-            <div class="header-actions">
-                <span style="font-size: 0.85rem; color: var(--success);">● Live Connected</span>
-                <button class="btn-live" onclick="openModal()">+ Log New Call</button>
-            </div>
-        </header>
+function initializeDateSelectors() {
+  const dates = [...new Set(appData.calls.map(c => c.date))].filter(Boolean).sort();
+  const latestDate = dates.length > 0 ? dates[dates.length - 1] : new Date().toISOString().slice(0, 10);
+  document.getElementById("activeDateSelect").value = latestDate;
+  document.getElementById("inputDate").value = new Date().toISOString().slice(0, 10);
 
-        <!-- KPI Cards -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <span class="kpi-title">Total Calls Logged</span>
-                <span class="kpi-value" id="kpi-total">13</span>
-                <span class="kpi-sub">▲ Google Sheet Sync</span>
-            </div>
-            <div class="kpi-card" style="--cyan: var(--violet)">
-                <span class="kpi-title">Active Supervisors</span>
-                <span class="kpi-value">11</span>
-                <span class="kpi-sub" style="color: var(--violet)">Team Leads Active</span>
-            </div>
-            <div class="kpi-card" style="--cyan: var(--blue)">
-                <span class="kpi-title">Total Roster Agents</span>
-                <span class="kpi-value">230</span>
-                <span class="kpi-sub" style="color: var(--blue)">CTG Site</span>
-            </div>
+  document.getElementById("activeDateSelect").addEventListener("change", () => {
+    renderKPIs();
+    renderSupervisorLeaderboard();
+  });
+}
+
+// Calculate Tenure from DOJ string
+function calculateTenure(dojStr) {
+  if (!dojStr || dojStr.includes("#")) return "N/A";
+  const doj = new Date(dojStr);
+  if (isNaN(doj.getTime())) return dojStr;
+
+  const now = new Date();
+  const diffDays = Math.max(0, Math.floor((now - doj) / (1000 * 60 * 60 * 24)));
+  const years = Math.floor(diffDays / 365);
+  const months = Math.floor((diffDays % 365) / 30);
+  const days = diffDays % 30;
+
+  if (years > 0) return `${years}y ${months}m (${diffDays}d)`;
+  if (months > 0) return `${months}m ${days}d (${diffDays}d)`;
+  return `${diffDays} days`;
+}
+
+// Find Agent in Alignment by AVAYA ID or Name
+function findAgentMetadata(avaya, name) {
+  return appData.alignment.find(
+    a => String(a.avaya).trim() === String(avaya).trim() ||
+         (name && a.name.toLowerCase().trim() === name.toLowerCase().trim())
+  );
+}
+
+// Render Everything
+function renderAll() {
+  renderKPIs();
+  renderSupervisorLeaderboard();
+  renderTLImpactChart();
+  renderDailyTrendChart();
+  applyCallFilters();
+  renderTopAssociates();
+  renderZeroTransferStars();
+  renderRepeatMsisdn();
+}
+
+// 1. RENDER TOP KPI CARDS
+function renderKPIs() {
+  const calls = appData.calls;
+  const activeDate = document.getElementById("activeDateSelect").value;
+  const todayCalls = calls.filter(c => c.date === activeDate);
+
+  // Total Calls (MTD & Selected Date)
+  document.getElementById("kpiMtdCalls").textContent = calls.length;
+  document.getElementById("kpiTodayCalls").textContent = `${todayCalls.length} Calls (${activeDate})`;
+
+  // Inbound vs Outbound Split
+  const inboundCount = calls.filter(c => (c.callType || "").toLowerCase() === "inbound").length;
+  const outboundCount = calls.filter(c => (c.callType || "").toLowerCase() === "outbound").length;
+  const total = calls.length || 1;
+  const inPct = Math.round((inboundCount / total) * 100);
+  const outPct = 100 - inPct;
+
+  document.getElementById("kpiInboundPct").textContent = `${inPct}%`;
+  document.getElementById("kpiOutboundPct").textContent = `${outPct}%`;
+  document.getElementById("kpiInboundBar").style.width = `${inPct}%`;
+  document.getElementById("kpiOutboundBar").style.width = `${outPct}%`;
+  document.getElementById("kpiInboundCount").textContent = inboundCount;
+  document.getElementById("kpiOutboundCount").textContent = outboundCount;
+
+  // Skill-wise Breakdown
+  const skillCounts = {};
+  calls.forEach(c => {
+    const sk = c.skill || "Other";
+    skillCounts[sk] = (skillCounts[sk] || 0) + 1;
+  });
+  const defaultSkills = ["Mass", "Premium", "Retailer-456", "Live Chat"];
+  defaultSkills.forEach(sk => { if (!(sk in skillCounts)) skillCounts[sk] = 0; });
+
+  const skillContainer = document.getElementById("kpiSkillBreakdown");
+  skillContainer.innerHTML = Object.entries(skillCounts)
+    .map(([skill, count]) => {
+      const pct = calls.length ? Math.round((count / calls.length) * 100) : 0;
+      return `
+        <div class="flex items-center justify-between bg-slate-900/90 px-2.5 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-300 font-medium truncate">${skill}</span>
+          <span class="font-bold text-cyanGlow">${count} <span class="text-[10px] text-slate-400">(${pct}%)</span></span>
         </div>
+      `;
+    })
+    .join("");
 
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-box">
-                <div class="chart-header"><h3>Call Volume Trend</h3></div>
-                <div class="canvas-container"><canvas id="trendChart"></canvas></div>
+  // Active Supervisors in Call
+  const totalSups = appData.supervisors.length || 11;
+  const validMtdSups = new Set(
+    calls.map(c => c.supervisorInCall).filter(s => s && s !== "#N/A" && s.trim() !== "")
+  );
+  const validTodaySups = new Set(
+    todayCalls.map(c => c.supervisorInCall).filter(s => s && s !== "#N/A" && s.trim() !== "")
+  );
+
+  document.getElementById("kpiActiveSup").textContent = validMtdSups.size;
+  document.getElementById("kpiTotalSup").textContent = totalSups;
+  document.getElementById("kpiTodayActiveSup").textContent = `${validTodaySups.size} of ${totalSups} Active`;
+
+  // Zero-Transfer Star Associates
+  const transferringSet = new Set(calls.map(c => String(c.avaya).trim()));
+  const totalRoster = appData.totalAlignedAssociates || appData.alignment.length || 226;
+  const uniqueTransferringAgents = transferringSet.size;
+  const zeroTransferCount = Math.max(0, totalRoster - uniqueTransferringAgents);
+  const zeroPct = ((zeroTransferCount / totalRoster) * 100).toFixed(1);
+
+  document.getElementById("kpiZeroTransferCount").textContent = zeroTransferCount;
+  document.getElementById("kpiTotalAgents").textContent = totalRoster;
+  document.getElementById("kpiZeroTransferPct").textContent = `${zeroPct}%`;
+}
+
+// 2. SUPERVISOR CALL RECEIVER LEADERBOARD
+function setSupervisorMode(mode) {
+  supervisorMode = mode;
+  const btnM = document.getElementById("supToggleMonthly");
+  const btnD = document.getElementById("supToggleDaily");
+  if (mode === "monthly") {
+    btnM.className = "px-2.5 py-1 rounded-md font-semibold bg-cyanGlow text-obsidian transition";
+    btnD.className = "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white transition";
+  } else {
+    btnD.className = "px-2.5 py-1 rounded-md font-semibold bg-cyanGlow text-obsidian transition";
+    btnM.className = "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white transition";
+  }
+  renderSupervisorLeaderboard();
+}
+
+function renderSupervisorLeaderboard() {
+  const activeDate = document.getElementById("activeDateSelect").value;
+  const sourceCalls = supervisorMode === "daily"
+    ? appData.calls.filter(c => c.date === activeDate)
+    : appData.calls;
+
+  const counts = {};
+  appData.supervisors.forEach(s => (counts[s] = 0));
+  sourceCalls.forEach(c => {
+    const sup = c.supervisorInCall;
+    if (sup && sup !== "#N/A") {
+      counts[sup] = (counts[sup] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const maxVal = Math.max(1, sorted[0]?.[1] || 1);
+
+  const container = document.getElementById("supervisorLeaderboardList");
+  container.innerHTML = sorted
+    .map(([name, count], idx) => {
+      const widthPct = Math.round((count / maxVal) * 100);
+      const badgeColor =
+        idx === 0 && count > 0
+          ? "bg-cyanGlow text-obsidian"
+          : idx === 1 && count > 0
+          ? "bg-neonViolet text-white"
+          : idx === 2 && count > 0
+          ? "bg-sky-500 text-obsidian"
+          : "bg-slate-800 text-slate-400";
+
+      return `
+        <div class="p-2.5 rounded-xl bg-slate-900/75 border border-slate-800/90 space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full text-[11px] font-extrabold flex items-center justify-center ${badgeColor}">
+                ${idx + 1}
+              </span>
+              <span class="font-semibold text-slate-200">${name}</span>
             </div>
-            <div class="chart-box">
-                <div class="chart-header"><h3>Supervisor Distribution</h3></div>
-                <div class="canvas-container"><canvas id="supPieChart"></canvas></div>
-            </div>
+            <span class="font-extrabold text-cyanGlow">${count} <span class="text-[10px] font-normal text-slate-400">calls</span></span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-cyanGlow to-neonViolet rounded-full transition-all duration-500" style="width: ${widthPct}%"></div>
+          </div>
         </div>
-    </main>
+      `;
+    })
+    .join("");
+}
 
-    <!-- Log Call Modal -->
-    <div class="modal" id="callModal">
-        <div class="modal-content">
-            <h3>Log New Supervisor Call</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Enter details to push directly to Google Sheet.</p>
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" id="callDate" value="2026-11-01">
-            </div>
-            <div class="form-group">
-                <label>Dialed MSISDN</label>
-                <input type="text" id="callMsisdn" placeholder="e.g. 1759018235">
-            </div>
-            <div class="form-group">
-                <label>AVAYA ID</label>
-                <input type="text" id="callAvaya" placeholder="e.g. 115582">
-            </div>
-            <div class="form-group">
-                <label>Transferred By (CSA Name)</label>
-                <input type="text" id="callCsa" placeholder="e.g. Afroja Nusrat Prome">
-            </div>
-            <div class="form-group">
-                <label>Supervisor in Call</label>
-                <select id="callSup">
-                    <option>Sattazit Gosh</option>
-                    <option>Sanjida Islam Tinny</option>
-                    <option>Mohammad Imam Hossain</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Call Type</label>
-                <select id="callType">
-                    <option>Inbound</option>
-                    <option>Outbound</option>
-                </select>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-submit" onclick="submitCall()">Submit to Sheet</button>
-            </div>
-        </div>
-    </div>
+// 3. TEAM LEADER IMPACT CHART
+function renderTLImpactChart() {
+  const tlCounts = {};
+  appData.calls.forEach(c => {
+    const tl = c.teamLeader || "Unassigned";
+    tlCounts[tl] = (tlCounts[tl] || 0) + 1;
+  });
 
-    <script>
-        // REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
-        const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+  const sorted = Object.entries(tlCounts).sort((a, b) => b[1] - a[1]);
+  const labels = sorted.map(i => i[0]);
+  const data = sorted.map(i => i[1]);
 
-        function openModal() { document.getElementById('callModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('callModal').style.display = 'none'; }
+  const ctx = document.getElementById("tlImpactChart").getContext("2d");
+  if (tlChartInstance) tlChartInstance.destroy();
 
-        async function submitCall() {
-            const payload = {
-                date: document.getElementById('callDate').value,
-                msisdn: document.getElementById('callMsisdn').value,
-                avaya: document.getElementById('callAvaya').value,
-                csa: document.getElementById('callCsa').value,
-                sup: document.getElementById('callSup').value,
-                type: document.getElementById('callType').value
-            };
-
-            if(!payload.msisdn || !payload.avaya) {
-                alert("Please fill in MSISDN and AVAYA ID.");
-                return;
-            }
-
-            try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                alert("Call successfully logged and sent to Google Sheet!");
-                closeModal();
-                location.reload();
-            } catch (err) {
-                alert("Error sending to sheet: " + err);
-            }
+  tlChartInstance = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Calls Transferred by Team",
+          data,
+          backgroundColor: "rgba(139, 92, 246, 0.75)",
+          borderColor: "#00f2fe",
+          borderWidth: 1.5,
+          borderRadius: 6
         }
+      ]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { color: "#94a3b8", stepSize: 1 },
+          grid: { color: "rgba(148, 163, 184, 0.1)" }
+        },
+        y: {
+          ticks: { color: "#e2e8f0", font: { size: 11 } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
 
-        // Charts Init
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
-        
-        new Chart(document.getElementById('trendChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Nov 1', 'Nov 2', 'Nov 3', 'Nov 4', 'Nov 5', 'Nov 6'],
-                datasets: [{ data: [13, 0, 0, 0, 0, 6], backgroundColor: '#00f2fe', borderRadius: 6 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
+// 4. DAILY TREND LINE CHART
+function renderDailyTrendChart() {
+  const dateMap = {};
+  appData.calls.forEach(c => {
+    if (!c.date) return;
+    if (!dateMap[c.date]) dateMap[c.date] = { total: 0, inbound: 0, outbound: 0 };
+    dateMap[c.date].total += 1;
+    if ((c.callType || "").toLowerCase() === "inbound") dateMap[c.date].inbound += 1;
+    else dateMap[c.date].outbound += 1;
+  });
 
-        new Chart(document.getElementById('supPieChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Sattazit Gosh', 'Sanjida Tinny', 'Imam Hossain'],
-                datasets: [{ data: [6, 4, 3], backgroundColor: ['#00f2fe', '#8b5cf6', '#3b82f6'], borderWidth: 0 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-        });
-    </script>
-</body>
-</html>
+  const dates = Object.keys(dateMap).sort();
+  const totalSeries = dates.map(d => dateMap[d].total);
+  const inboundSeries = dates.map(d => dateMap[d].inbound);
+  const outboundSeries = dates.map(d => dateMap[d].outbound);
+
+  const ctx = document.getElementById("dailyTrendChart").getContext("2d");
+  if (trendChartInstance) trendChartInstance.destroy();
+
+  trendChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          label: "Total Calls",
+          data: totalSeries,
+          borderColor: "#00f2fe",
+          backgroundColor: "rgba(0, 242, 254, 0.15)",
+          fill: true,
+          tension: 0.35,
+          pointRadius: 4
+        },
+        {
+          label: "Inbound",
+          data: inboundSeries,
+          borderColor: "#8b5cf6",
+          borderDash: [4, 4],
+          tension: 0.35,
+          pointRadius: 3
+        },
+        {
+          label: "Outbound",
+          data: outboundSeries,
+          borderColor: "#10b981",
+          tension: 0.35,
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#cbd5e1", boxWidth: 12, font: { size: 11 } } }
+      },
+      scales: {
+        x: {
+          ticks: { color: "#94a3b8", font: { size: 11 } },
+          grid: { color: "rgba(148, 163, 184, 0.08)" }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: "#94a3b8", stepSize: 1 },
+          grid: { color: "rgba(148, 163, 184, 0.1)" }
+        }
+      }
+    }
+  });
+}
+
+// 5. SMART FILTER & SEARCHABLE CALL LOG
+function populateFilterDropdowns() {
+  const sups = [...new Set([...appData.supervisors, ...appData.calls.map(c => c.supervisorInCall)])].filter(Boolean);
+  const tls = [...new Set([...appData.alignment.map(a => a.supervisor), ...appData.calls.map(c => c.teamLeader)])].filter(Boolean);
+  const skills = [...new Set([...appData.alignment.map(a => a.lob), ...appData.calls.map(c => c.skill)])].filter(Boolean);
+
+  fillSelect("filterSupervisor", sups, "All Supervisors");
+  fillSelect("filterTL", tls, "All");
+  fillSelect("filterSkill", skills, "All");
+  fillSelect("zeroStarTLFilter", tls, "All Team Leaders");
+  fillSelect("zeroStarLOBFilter", skills, "All LOB / Skills");
+}
+
+function fillSelect(id, items, defaultLabel) {
+  const el = document.getElementById(id);
+  const currentVal = el.value || "ALL";
+  el.innerHTML = `<option value="ALL">${defaultLabel}</option>` +
+    items.map(i => `<option value="${i}">${i}</option>`).join("");
+  el.value = items.includes(currentVal) ? currentVal : "ALL";
+}
+
+function applyCallFilters() {
+  const q = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+  const start = document.getElementById("filterStartDate").value;
+  const end = document.getElementById("filterEndDate").value;
+  const sup = document.getElementById("filterSupervisor").value;
+  const tl = document.getElementById("filterTL").value;
+  const skill = document.getElementById("filterSkill").value;
+  const type = document.getElementById("filterCallType").value;
+
+  const filtered = appData.calls.filter(c => {
+    const matchQ =
+      !q ||
+      String(c.avaya).toLowerCase().includes(q) ||
+      (c.csaName || "").toLowerCase().includes(q) ||
+      String(c.msisdn).toLowerCase().includes(q);
+    const matchStart = !start || c.date >= start;
+    const matchEnd = !end || c.date <= end;
+    const matchSup = sup === "ALL" || c.supervisorInCall === sup;
+    const matchTL = tl === "ALL" || c.teamLeader === tl;
+    const matchSkill = skill === "ALL" || c.skill === skill;
+    const matchType = type === "ALL" || (c.callType || "").toLowerCase() === type.toLowerCase();
+
+    return matchQ && matchStart && matchEnd && matchSup && matchTL && matchSkill && matchType;
+  });
+
+  document.getElementById("filteredCallCountBadge").textContent = `${filtered.length} Records`;
+  renderCallLogViews(filtered);
+}
+
+function resetCallFilters() {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("filterStartDate").value = "";
+  document.getElementById("filterEndDate").value = "";
+  document.getElementById("filterSupervisor").value = "ALL";
+  document.getElementById("filterTL").value = "ALL";
+  document.getElementById("filterSkill").value = "ALL";
+  document.getElementById("filterCallType").value = "ALL";
+  applyCallFilters();
+}
+
+function renderCallLogViews(calls) {
+  const tbody = document.getElementById("callLogTableBody");
+  const mobileContainer = document.getElementById("callLogMobileCards");
+
+  if (calls.length === 0) {
+    const emptyMsg = `<div class="py-8 text-center text-slate-400 text-xs">No matching call records found.</div>`;
+    tbody.innerHTML = `<tr><td colspan="11">${emptyMsg}</td></tr>`;
+    mobileContainer.innerHTML = emptyMsg;
+    return;
+  }
+
+  // Desktop Table Rows
+  tbody.innerHTML = calls
+    .map((c, idx) => {
+      const agent = findAgentMetadata(c.avaya, c.csaName);
+      const tenure = agent ? calculateTenure(agent.doj) : "N/A";
+      const typeBadge =
+        (c.callType || "").toLowerCase() === "inbound"
+          ? "bg-cyan-500/15 text-cyanGlow border-cyan-500/30"
+          : "bg-violet-500/15 text-neonViolet border-violet-500/30";
+
+      return `
+        <tr class="hover:bg-slate-900/60 transition">
+          <td class="py-2.5 px-3 text-slate-400 font-medium">${idx + 1}</td>
+          <td class="py-2.5 px-3 font-medium text-slate-200">${c.date}</td>
+          <td class="py-2.5 px-3">
+            <button onclick="openMsisdnModal('${c.msisdn}')" class="font-bold text-cyanGlow hover:underline">${c.msisdn}</button>
+          </td>
+          <td class="py-2.5 px-3 font-mono text-slate-300">${c.avaya}</td>
+          <td class="py-2.5 px-3 font-semibold text-white">${c.csaName}</td>
+          <td class="py-2.5 px-3 text-slate-400">${tenure}</td>
+          <td class="py-2.5 px-3 text-slate-300">${c.teamLeader}</td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-200">${c.skill}</span></td>
+          <td class="py-2.5 px-3 font-semibold text-neonViolet">${c.supervisorInCall}</td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full border text-[11px] font-semibold ${typeBadge}">${c.callType}</span></td>
+          <td class="py-2.5 px-3 text-slate-400">${c.remarks || "-"}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  // Mobile Card View
+  mobileContainer.innerHTML = calls
+    .map(c => {
+      const agent = findAgentMetadata(c.avaya, c.csaName);
+      const tenure = agent ? calculateTenure(agent.doj) : "N/A";
+      return `
+        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
+          <div class="flex items-center justify-between">
+            <button onclick="openMsisdnModal('${c.msisdn}')" class="text-sm font-extrabold text-cyanGlow">${c.msisdn}</button>
+            <span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-semibold">${c.callType} • ${c.skill}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1 text-slate-300">
+            <div><span class="text-slate-500">CSA:</span> <strong>${c.csaName}</strong> (${c.avaya})</div>
+            <div><span class="text-slate-500">Tenure:</span> ${tenure}</div>
+            <div><span class="text-slate-500">TL:</span> ${c.teamLeader}</div>
+            <div><span class="text-slate-500">Sup in Call:</span> <strong class="text-neonViolet">${c.supervisorInCall}</strong></div>
+          </div>
+          <div class="text-[11px] text-slate-400 flex justify-between pt-1 border-t border-slate-800/80">
+            <span>Date: ${c.date}</span>
+            <span>${c.remarks || "No remarks"}</span>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+// 6. AGENT PERFORMANCE & REPEAT CALLER TRACKER TABS
+function switchTrackerTab(tab) {
+  const tabs = {
+    topAssoc: ["tabBtnTopAssoc", "tabPanelTopAssoc"],
+    zeroStar: ["tabBtnZeroStar", "tabPanelZeroStar"],
+    repeatMsisdn: ["tabBtnRepeatMsisdn", "tabPanelRepeatMsisdn"]
+  };
+
+  Object.entries(tabs).forEach(([key, [btnId, panelId]]) => {
+    const btn = document.getElementById(btnId);
+    const panel = document.getElementById(panelId);
+    if (key === tab) {
+      btn.classList.add("tab-active");
+      panel.classList.remove("hidden");
+    } else {
+      btn.classList.remove("tab-active");
+      panel.classList.add("hidden");
+    }
+  });
+}
+
+// Tab 1: Top Transferring Associates + Tenure
+function renderTopAssociates() {
+  const map = {};
+  appData.calls.forEach(c => {
+    const key = String(c.avaya || c.csaName).trim();
+    if (!map[key]) {
+      const meta = findAgentMetadata(c.avaya, c.csaName);
+      map[key] = {
+        avaya: c.avaya,
+        name: c.csaName,
+        teamLeader: c.teamLeader || (meta ? meta.supervisor : ""),
+        skill: c.skill || (meta ? meta.lob : ""),
+        doj: meta ? meta.doj : "N/A",
+        count: 0
+      };
+    }
+    map[key].count += 1;
+  });
+
+  const sorted = Object.values(map).sort((a, b) => b.count - a.count);
+  const tbody = document.getElementById("topAssociatesBody");
+
+  tbody.innerHTML = sorted
+    .map((a, idx) => `
+      <tr class="hover:bg-slate-900/60 transition">
+        <td class="py-2.5 px-3 font-extrabold text-cyanGlow">#${idx + 1}</td>
+        <td class="py-2.5 px-3 font-mono text-slate-300">${a.avaya}</td>
+        <td class="py-2.5 px-3 font-bold text-white">${a.name}</td>
+        <td class="py-2.5 px-3 text-slate-300">${a.teamLeader}</td>
+        <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800">${a.skill}</span></td>
+        <td class="py-2.5 px-3 text-slate-400">${a.doj}</td>
+        <td class="py-2.5 px-3 text-emerald-400 font-medium">${calculateTenure(a.doj)}</td>
+        <td class="py-2.5 px-3"><span class="px-2.5 py-1 rounded-full font-extrabold bg-neonViolet/20 text-neonViolet border border-neonViolet/40">${a.count}</span></td>
+      </tr>
+    `)
+    .join("");
+}
+
+// Tab 2: Zero-Transfer Star List
+function renderZeroTransferStars() {
+  const transferredAvayas = new Set(appData.calls.map(c => String(c.avaya).trim()));
+  const q = (document.getElementById("zeroStarSearch").value || "").toLowerCase().trim();
+  const tlFilter = document.getElementById("zeroStarTLFilter").value;
+  const lobFilter = document.getElementById("zeroStarLOBFilter").value;
+
+  const stars = appData.alignment.filter(a => !transferredAvayas.has(String(a.avaya).trim()));
+  const totalRoster = appData.totalAlignedAssociates || appData.alignment.length;
+  document.getElementById("zeroStarTabCount").textContent = Math.max(stars.length, totalRoster - transferredAvayas.size);
+
+  const filteredStars = stars.filter(a => {
+    const matchQ = !q || a.name.toLowerCase().includes(q) || String(a.avaya).toLowerCase().includes(q);
+    const matchTL = tlFilter === "ALL" || a.supervisor === tlFilter;
+    const matchLOB = lobFilter === "ALL" || a.lob === lobFilter;
+    return matchQ && matchTL && matchLOB;
+  });
+
+  const tbody = document.getElementById("zeroStarTableBody");
+  tbody.innerHTML = filteredStars
+    .map((a, idx) => `
+      <tr class="hover:bg-slate-900/60 transition">
+        <td class="py-2.5 px-3 text-slate-400">${idx + 1}</td>
+        <td class="py-2.5 px-3 font-mono text-cyanGlow">${a.avaya}</td>
+        <td class="py-2.5 px-3 font-semibold text-white">${a.name}</td>
+        <td class="py-2.5 px-3 text-slate-300">${a.supervisor}</td>
+        <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-800">${a.lob}</span></td>
+        <td class="py-2.5 px-3 text-slate-400">${a.doj}</td>
+        <td class="py-2.5 px-3 text-slate-300">${calculateTenure(a.doj)}</td>
+        <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-[11px]">★ 0 Transfers</span></td>
+      </tr>
+    `)
+    .join("");
+}
+
+// Tab 3: Repeat MSISDN Alert & History Modal
+function renderRepeatMsisdn() {
+  const map = {};
+  appData.calls.forEach(c => {
+    const m = String(c.msisdn).trim();
+    if (!m) return;
+    if (!map[m]) {
+      map[m] = { msisdn: m, count: 0, lastDate: c.date, lastSup: c.supervisorInCall };
+    }
+    map[m].count += 1;
+    if (c.date >= map[m].lastDate) {
+      map[m].lastDate = c.date;
+      map[m].lastSup = c.supervisorInCall;
+    }
+  });
+
+  const sorted = Object.values(map).sort((a, b) => b.count - a.count).slice(0, 15);
+  const tbody = document.getElementById("repeatMsisdnBody");
+
+  tbody.innerHTML = sorted
+    .map((item, idx) => `
+      <tr class="hover:bg-slate-900/60 transition">
+        <td class="py-2.5 px-3 font-bold text-slate-400">#${idx + 1}</td>
+        <td class="py-2.5 px-3">
+          <button onclick="openMsisdnModal('${item.msisdn}')" class="font-extrabold text-cyanGlow hover:underline">${item.msisdn}</button>
+        </td>
+        <td class="py-2.5 px-3">
+          <span class="px-2.5 py-0.5 rounded-full font-extrabold ${item.count > 1 ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : 'bg-slate-800 text-slate-200'}">
+            ${item.count} Call${item.count > 1 ? 's' : ''}
+          </span>
+        </td>
+        <td class="py-2.5 px-3 text-slate-300">${item.lastDate}</td>
+        <td class="py-2.5 px-3 text-neonViolet font-semibold">${item.lastSup}</td>
+        <td class="py-2.5 px-3">
+          <button onclick="openMsisdnModal('${item.msisdn}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyanGlow hover:bg-cyan-500/30 text-[11px] font-bold">
+            View History
+          </button>
+        </td>
+      </tr>
+    `)
+    .join("");
+}
+
+function openMsisdnModal(msisdn) {
+  const matches = appData.calls.filter(c => String(c.msisdn).trim() === String(msisdn).trim());
+  document.getElementById("modalMsisdnTitle").textContent = msisdn;
+  const list = document.getElementById("msisdnHistoryList");
+
+  list.innerHTML = matches
+    .map((c, i) => `
+      <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <span class="text-cyanGlow font-bold">#${i + 1} • ${c.date}</span>
+          <p class="text-white font-semibold mt-0.5">Transferred by: ${c.csaName} (AVAYA: ${c.avaya})</p>
+          <p class="text-slate-400">Team Leader: ${c.teamLeader} | Skill: ${c.skill}</p>
+        </div>
+        <div class="sm:text-right">
+          <span class="px-2.5 py-1 rounded-full bg-neonViolet/20 text-neonViolet font-bold">Handled by: ${c.supervisorInCall}</span>
+          <p class="text-slate-400 mt-1">Type: ${c.callType} ${c.remarks ? `• ${c.remarks}` : ""}</p>
+        </div>
+      </div>
+    `)
+    .join("");
+
+  document.getElementById("msisdnModal").classList.remove("hidden");
+}
+
+function closeMsisdnModal() {
+  document.getElementById("msisdnModal").classList.add("hidden");
+}
+
+// 7. ADD NEW CALL MODAL & AUTO-FILL FROM ALIGNMENT ROSTER
+function openAddCallModal() {
+  document.getElementById("addCallModal").classList.remove("hidden");
+}
+
+function closeAddCallModal() {
+  document.getElementById("addCallModal").classList.add("hidden");
+  document.getElementById("submitStatusMsg").classList.add("hidden");
+}
+
+function autoFillAgentByAvaya(avayaVal) {
+  const agent = appData.alignment.find(a => String(a.avaya).trim() === String(avayaVal).trim());
+  if (agent) {
+    document.getElementById("inputCsaName").value = agent.name;
+    document.getElementById("inputTeamLeader").value = agent.supervisor;
+    if (agent.lob) {
+      document.getElementById("inputSkill").value = agent.lob;
+    }
+  }
+}
+
+async function submitNewCall(e) {
+  e.preventDefault();
+  const newCall = {
+    date: document.getElementById("inputDate").value,
+    msisdn: document.getElementById("inputMsisdn").value.trim(),
+    avaya: document.getElementById("inputAvaya").value.trim(),
+    csaName: document.getElementById("inputCsaName").value.trim(),
+    teamLeader: document.getElementById("inputTeamLeader").value.trim(),
+    skill: document.getElementById("inputSkill").value,
+    supervisorInCall: document.getElementById("inputSupervisorInCall").value,
+    callType: document.getElementById("inputCallType").value,
+    remarks: document.getElementById("inputRemarks").value.trim()
+  };
+
+  const statusEl = document.getElementById("submitStatusMsg");
+  const submitBtn = document.getElementById("submitCallBtn");
+  statusEl.classList.remove("hidden");
+
+  // 1. Instantly update UI
+  appData.calls.unshift(newCall);
+  document.getElementById("activeDateSelect").value = newCall.date;
+  renderAll();
+
+  // 2. Push to Google Sheet if Apps Script Web App URL is configured
+  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
+    try {
+      submitBtn.disabled = true;
+      statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-cyan-500/20 text-cyanGlow";
+      statusEl.textContent = "Uploading call record to Google Sheet...";
+
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "addCall", payload: newCall })
+      });
+
+      statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-emerald-500/20 text-emerald-400";
+      statusEl.textContent = "✓ Added to Dashboard & Synced to Google Sheet!";
+    } catch (err) {
+      statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-amber-500/20 text-amber-400";
+      statusEl.textContent = "Added locally to dashboard, but Sheet push failed.";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  } else {
+    statusEl.className = "text-xs font-semibold p-2 rounded-lg text-center bg-emerald-500/20 text-emerald-400";
+    statusEl.textContent = "✓ Added to Dashboard! (Configure Apps Script URL in app.js for Sheet write-back)";
+  }
+
+  setTimeout(() => {
+    document.getElementById("addCallForm").reset();
+    document.getElementById("inputDate").value = newCall.date;
+    closeAddCallModal();
+  }, 1200);
+}
+
+// 8. DARK / LIGHT THEME TOGGLE
+function toggleTheme() {
+  const html = document.documentElement;
+  const body = document.body;
+  html.classList.toggle("dark");
+  body.classList.toggle("dark");
+}
