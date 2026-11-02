@@ -1,207 +1,1876 @@
 {
-"lastUpdated": "2026-11-02T20:41:00+06:00",
-"totalAlignedAssociates": 226,
-"supervisors": [
-"Sattazit Gosh",
-"Sanjida Islam Tinny",
-"Mohammad Imam Hossain",
-"Fahad Hridoy",
-"Faria Sharmin Etu",
-"Mohammad Sabbir Hossain",
-"Nusrat Jahan Tamanna",
-"Kazi Md.Tareque",
-"Md Zahidul Islam Siam",
-"Md Ariful Islam Niloy",
-"Shajjadul Rhythm"
-],
-"calls": [
-{
-"date": "2026-11-01",
-"msisdn": "1759018235",
-"avaya": "115582",
-"csaName": "Afroja Nusrat Prome",
-"teamLeader": "Shajjadul Rhythm",
-"skill": "Premium",
-"supervisorInCall": "Sanjida Islam Tinny",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1711090068",
-"avaya": "115388",
-"csaName": "Umme tabassum",
-"teamLeader": "Sattazit Gosh",
-"skill": "Premium",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1735779979",
-"avaya": "112794",
-"csaName": "Sharmin Akter Rima",
-"teamLeader": "Md Ariful Islam Niloy",
-"skill": "Premium",
-"supervisorInCall": "Sanjida Islam Tinny",
-"callType": "Outbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1797012128",
-"avaya": "116247",
-"csaName": "Aklima Sultana Mitu",
-"teamLeader": "Nusrat Jahan Tamanna",
-"skill": "Mass",
-"supervisorInCall": "Sanjida Islam Tinny",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1751183895",
-"avaya": "115916",
-"csaName": "Mst Najnin Sultana Sifat",
-"teamLeader": "Sanjida Islam Tinny",
-"skill": "Mass",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Outbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1305759495",
-"avaya": "115984",
-"csaName": "Nirab Kanti Dey",
-"teamLeader": "Mohammad Imam Hossain",
-"skill": "Mass",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Outbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1318412729",
-"avaya": "116160",
-"csaName": "Jannatul Ferdous",
-"teamLeader": "Nusrat Jahan Tamanna",
-"skill": "Mass",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Outbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1713197668",
-"avaya": "115550",
-"csaName": "Rahatunnesa Mimsa",
-"teamLeader": "Shajjadul Rhythm",
-"skill": "Premium",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1723019510",
-"avaya": "115358",
-"csaName": "Israt Jahan",
-"teamLeader": "Sattazit Gosh",
-"skill": "Premium",
-"supervisorInCall": "Sanjida Islam Tinny",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1724116948",
-"avaya": "116068",
-"csaName": "Mahim Azad",
-"teamLeader": "Mohammad Imam Hossain",
-"skill": "Mass",
-"supervisorInCall": "Mohammad Imam Hossain",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1712323015",
-"avaya": "115886",
-"csaName": "Avijit Paul",
-"teamLeader": "Sattazit Gosh",
-"skill": "Premium",
-"supervisorInCall": "Sattazit Gosh",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1743985814",
-"avaya": "116162",
-"csaName": "Mahadi Hasan",
-"teamLeader": "Mohammad Imam Hossain",
-"skill": "Mass",
-"supervisorInCall": "Mohammad Imam Hossain",
-"callType": "Inbound",
-"remarks": ""
-},
-{
-"date": "2026-11-01",
-"msisdn": "1714620134",
-"avaya": "116068",
-"csaName": "Mahim Azad",
-"teamLeader": "Mohammad Imam Hossain",
-"skill": "Mass",
-"supervisorInCall": "Mohammad Imam Hossain",
-"callType": "Inbound",
-"remarks": ""
-}
-],
-"alignment": [
-{ "avaya": "111438", "name": "Shamima Quader", "doj": "2021-09-26", "lob": "Outbound", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "112166", "name": "Mitu Acharjee", "doj": "2022-01-27", "lob": "Retailer-456", "supervisor": "Faria Sharmin Etu", "status": "Active" },
-{ "avaya": "112245", "name": "Fatema Akter", "doj": "2022-03-11", "lob": "Live Chat", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "112252", "name": "Moriom Akter Bristi", "doj": "2022-03-29", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "112253", "name": "Farjana Akter Nela", "doj": "2022-03-29", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "112672", "name": "Najbin Haider Eva", "doj": "2022-09-28", "lob": "Premium", "supervisor": "Md Ariful Islam Niloy", "status": "Active" },
-{ "avaya": "112752", "name": "Md.Rahat Khan", "doj": "2022-11-15", "lob": "Premium", "supervisor": "Md Ariful Islam Niloy", "status": "Active" },
-{ "avaya": "112732", "name": "Papiya Barua", "doj": "2022-11-10", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "112794", "name": "Sharmin Akter Rima", "doj": "2022-12-08", "lob": "Premium", "supervisor": "Md Ariful Islam Niloy", "status": "Active" },
-{ "avaya": "112860", "name": "Fahima Akter", "doj": "2023-01-01", "lob": "Live Chat", "supervisor": "Md Zahidul Islam Siam", "status": "Active" },
-{ "avaya": "112987", "name": "Umaiya Un Nesa", "doj": "2023-03-22", "lob": "158", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "112989", "name": "Iftahara Yousuf", "doj": "2023-03-22", "lob": "Live Chat", "supervisor": "Md Zahidul Islam Siam", "status": "Active" },
-{ "avaya": "113045", "name": "Shavab Afrin Sayma", "doj": "2023-04-10", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "113088", "name": "Sangita Nath", "doj": "2023-05-03", "lob": "Retailer-456", "supervisor": "Faria Sharmin Etu", "status": "Active" },
-{ "avaya": "113297", "name": "Joy Mazumder", "doj": "2023-08-29", "lob": "Retailer-456", "supervisor": "Faria Sharmin Etu", "status": "Active" },
-{ "avaya": "113353", "name": "Surma Akter", "doj": "2023-09-17", "lob": "Premium", "supervisor": "Md Ariful Islam Niloy", "status": "Active" },
-{ "avaya": "113746", "name": "Mithila Farjana", "doj": "2024-02-06", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "113812", "name": "Md Osama Fakro", "doj": "2024-03-07", "lob": "Outbound", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "113873", "name": "Md. Kamrul Hasan Rajon", "doj": "2024-04-09", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "113925", "name": "Lata Das", "doj": "2024-05-15", "lob": "Retailer-456", "supervisor": "Faria Sharmin Etu", "status": "Active" },
-{ "avaya": "114020", "name": "Amena Akter", "doj": "2024-07-02", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "114134", "name": "Faisal Mahmood", "doj": "2024-08-05", "lob": "Retailer-456", "supervisor": "Faria Sharmin Etu", "status": "Active" },
-{ "avaya": "114149", "name": "Mehejabin Nishat Tamanna", "doj": "2024-08-30", "lob": "Live Chat", "supervisor": "Md Zahidul Islam Siam", "status": "Active" },
-{ "avaya": "114150", "name": "Fahima Akter", "doj": "2024-08-30", "lob": "158", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "114144", "name": "Nazmul Rehela Tisha", "doj": "2024-08-30", "lob": "Premium", "supervisor": "Md Ariful Islam Niloy", "status": "Active" },
-{ "avaya": "114373", "name": "Sanzida Akter", "doj": "2024-10-26", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "114508", "name": "Fahmida Faiza", "doj": "2025-01-26", "lob": "158", "supervisor": "Mohammad Sabbir Hossain", "status": "Active" },
-{ "avaya": "114519", "name": "Habibur Rahaman Alve", "doj": "2025-01-26", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "114504", "name": "Reshma Akter", "doj": "2025-01-26", "lob": "Mass", "supervisor": "Nusrat Jahan Tamanna", "status": "Active" },
-{ "avaya": "114524", "name": "Shorov Barua Joy", "doj": "2025-01-26", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "114660", "name": "Nusrat Jahan Chayon", "doj": "2025-02-13", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "114738", "name": "Tanjida Akter", "doj": "2025-03-20", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "115582", "name": "Afroja Nusrat Prome", "doj": "2025-07-15", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "115388", "name": "Umme tabassum", "doj": "2025-06-10", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "116247", "name": "Aklima Sultana Mitu", "doj": "2025-10-01", "lob": "Mass", "supervisor": "Nusrat Jahan Tamanna", "status": "Active" },
-{ "avaya": "115916", "name": "Mst Najnin Sultana Sifat", "doj": "2025-08-20", "lob": "Mass", "supervisor": "Sanjida Islam Tinny", "status": "Active" },
-{ "avaya": "115984", "name": "Nirab Kanti Dey", "doj": "2025-09-01", "lob": "Mass", "supervisor": "Mohammad Imam Hossain", "status": "Active" },
-{ "avaya": "116160", "name": "Jannatul Ferdous", "doj": "2025-09-18", "lob": "Mass", "supervisor": "Nusrat Jahan Tamanna", "status": "Active" },
-{ "avaya": "115550", "name": "Rahatunnesa Mimsa", "doj": "2025-07-12", "lob": "Premium", "supervisor": "Shajjadul Rhythm", "status": "Active" },
-{ "avaya": "115358", "name": "Israt Jahan", "doj": "2025-06-05", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "116068", "name": "Mahim Azad", "doj": "2025-09-10", "lob": "Mass", "supervisor": "Mohammad Imam Hossain", "status": "Active" },
-{ "avaya": "115886", "name": "Avijit Paul", "doj": "2025-08-14", "lob": "Premium", "supervisor": "Sattazit Gosh", "status": "Active" },
-{ "avaya": "116162", "name": "Mahadi Hasan", "doj": "2025-09-18", "lob": "Mass", "supervisor": "Mohammad Imam Hossain", "status": "Active" }
-]
+  "lastUpdated": "2026-11-02T14:57:48.647Z",
+  "totalAlignedAssociates": 214,
+  "supervisors": [
+    "Sattazit Gosh",
+    "Sanjida Islam Tinny",
+    "Mohammad Imam Hossain",
+    "Fahad Hridoy",
+    "Faria Sharmin Etu",
+    "Mohammad Sabbir Hossain",
+    "Nusrat Jahan Tamanna",
+    "Kazi Md.Tareque",
+    "Md Zahidul Islam Siam",
+    "Md Ariful Islam Niloy",
+    "Shajjadul Rhythm"
+  ],
+  "calls": [
+    {
+      "date": "2026-11-01",
+      "msisdn": "1759018235",
+      "avaya": "115582",
+      "csaName": "Afroja Nusrat Prome",
+      "teamLeader": "Shajjadul Rhythm",
+      "skill": "Premium",
+      "supervisorInCall": "#N/A",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1711090068",
+      "avaya": "115388",
+      "csaName": "Umme tabassum",
+      "teamLeader": "Sattazit Gosh",
+      "skill": "Premium",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1735779979",
+      "avaya": "112794",
+      "csaName": "Sharmin Akter Rima",
+      "teamLeader": "Md Ariful Islam Niloy",
+      "skill": "Premium",
+      "supervisorInCall": "Sanjida Islam Tinny",
+      "callType": "Outbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1797012128",
+      "avaya": "116247",
+      "csaName": "Aklima Sultana Mitu",
+      "teamLeader": "Nusrat Jahan Tamanna",
+      "skill": "Mass",
+      "supervisorInCall": "Sanjida Islam Tinny",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1751183895",
+      "avaya": "115916",
+      "csaName": "Mst Najnin Sultana Sifat",
+      "teamLeader": "Sanjida Islam Tinny",
+      "skill": "Mass",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Outbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1305759495",
+      "avaya": "115984",
+      "csaName": "Nirab Kanti Dey",
+      "teamLeader": "Mohammad Imam Hossain",
+      "skill": "Mass",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Outbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1318412729",
+      "avaya": "116160",
+      "csaName": "Jannatul Ferdous",
+      "teamLeader": "Nusrat Jahan Tamanna",
+      "skill": "Mass",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Outbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1713197668",
+      "avaya": "115550",
+      "csaName": "Rahatunnesa Mimsa",
+      "teamLeader": "Shajjadul Rhythm",
+      "skill": "Premium",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1723019510",
+      "avaya": "115358",
+      "csaName": "Israt Jahan",
+      "teamLeader": "Sattazit Gosh",
+      "skill": "Premium",
+      "supervisorInCall": "Sanjida Islam Tinny",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1724116948",
+      "avaya": "116068",
+      "csaName": "Mahim Azad",
+      "teamLeader": "Mohammad Imam Hossain",
+      "skill": "Mass",
+      "supervisorInCall": "Mohammad Imam Hossain",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1712323015",
+      "avaya": "115886",
+      "csaName": "Avijit Paul",
+      "teamLeader": "Sattazit Gosh",
+      "skill": "Premium",
+      "supervisorInCall": "Sattazit Gosh",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1743985814",
+      "avaya": "116162",
+      "csaName": "Mahadi Hasan",
+      "teamLeader": "Mohammad Imam Hossain",
+      "skill": "Mass",
+      "supervisorInCall": "Mohammad Imam Hossain",
+      "callType": "Inbound",
+      "remarks": ""
+    },
+    {
+      "date": "2026-11-01",
+      "msisdn": "1714620134",
+      "avaya": "116068",
+      "csaName": "Mahim Azad",
+      "teamLeader": "Mohammad Imam Hossain",
+      "skill": "Mass",
+      "supervisorInCall": "Mohammad Imam Hossain",
+      "callType": "Inbound",
+      "remarks": ""
+    }
+  ],
+  "alignment": [
+    {
+      "avaya": "111438",
+      "name": "Shamima Quader",
+      "doj": "2021-09-26",
+      "lob": "Outbound",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "112166",
+      "name": "Mitu Acharjee",
+      "doj": "2022-01-27",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "112245",
+      "name": "Fatema Akter",
+      "doj": "2022-03-11",
+      "lob": "Live Chat",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "112252",
+      "name": "Moriom Akter Bristi",
+      "doj": "2022-03-29",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "112253",
+      "name": "Farjana Akter Nela",
+      "doj": "2022-03-29",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "112672",
+      "name": "Najbin Haider Eva",
+      "doj": "2022-09-28",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "112752",
+      "name": "Md.Rahat Khan",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "112732",
+      "name": "Papiya Barua",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "112794",
+      "name": "Sharmin Akter Rima",
+      "doj": "2022-12-08",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "112860",
+      "name": "Fahima Akter",
+      "doj": "2023-01-01",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "112987",
+      "name": "Umaiya Un Nesa",
+      "doj": "2023-03-22",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "112989",
+      "name": "Iftahara Yousuf",
+      "doj": "2023-03-22",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "113045",
+      "name": "Shavab Afrin Sayma",
+      "doj": "2023-04-10",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "113088",
+      "name": "Sangita Nath",
+      "doj": "2023-05-03",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "113297",
+      "name": "Joy Mazumder",
+      "doj": "2023-08-29",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "113353",
+      "name": "Surma Akter",
+      "doj": "2023-09-17",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "113746",
+      "name": "Mithila Farjana",
+      "doj": "2024-02-06",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "113812",
+      "name": "Md Osama Fakro",
+      "doj": "2024-03-07",
+      "lob": "Outbound",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "113873",
+      "name": "Md. Kamrul Hasan Rajon",
+      "doj": "2024-04-09",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "113925",
+      "name": "Lata Das",
+      "doj": "########",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "114020",
+      "name": "Amena Akter",
+      "doj": "2024-07-02",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "114134",
+      "name": "Faisal Mahmood",
+      "doj": "2024-08-05",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "114149",
+      "name": "Mehejabin Nishat Tamanna",
+      "doj": "2024-08-30",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "114150",
+      "name": "Fahima Akter",
+      "doj": "2024-08-30",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "114144",
+      "name": "Nazmul Rehela Tisha",
+      "doj": "2024-08-30",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "114373",
+      "name": "Sanzida Akter",
+      "doj": "2024-10-26",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114508",
+      "name": "Fahmida Faiza",
+      "doj": "2025-01-26",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "114519",
+      "name": "Habibur Rahaman Alve",
+      "doj": "2025-01-26",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114504",
+      "name": "Reshma Akter",
+      "doj": "2025-01-26",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "114524",
+      "name": "Shorov Barua Joy",
+      "doj": "2025-01-26",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114660",
+      "name": "Nusrat Jahan Chayon",
+      "doj": "2025-02-13",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "114738",
+      "name": "Tanjida Akter",
+      "doj": "2025-03-20",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "114756",
+      "name": "Jannatul Naim",
+      "doj": "2025-04-14",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "114754",
+      "name": "Daisy Mallick",
+      "doj": "2025-04-14",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114819",
+      "name": "Md. Jahidul Alam",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114825",
+      "name": "Farjana Ahmmed Chowdhurni",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "No Need",
+      "name": "Fardin Kader Fahim",
+      "doj": "2025-06-04",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "No Need",
+      "name": "MD. Ali Musrak Roni",
+      "doj": "2025-06-04",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "114891",
+      "name": "Md Raihan Yousuf",
+      "doj": "2025-06-05",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "114898",
+      "name": "Rocksana Akter Lili",
+      "doj": "2025-06-05",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "114904",
+      "name": "Israt Jahan Emu",
+      "doj": "2025-06-05",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "114955",
+      "name": "Nusrat jahan nur",
+      "doj": "2025-07-17",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "114976",
+      "name": "Rabeya Akter Any",
+      "doj": "2025-07-17",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "114989",
+      "name": "Md wajed ali",
+      "doj": "2025-08-11",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "115011",
+      "name": "Mohammad Wally Sattar",
+      "doj": "2025-08-11",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "114991",
+      "name": "Joy Dey",
+      "doj": "2025-08-11",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115061",
+      "name": "Salmna Farshi Shadin",
+      "doj": "2025-09-10",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115114",
+      "name": "Syeda Faiza Rashid",
+      "doj": "2025-09-19",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115124",
+      "name": "Mohammad Riad Hossain",
+      "doj": "2025-09-19",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115121",
+      "name": "MD Saiful Alam Azad",
+      "doj": "2025-09-19",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115123",
+      "name": "Mahamudul Islam Alif",
+      "doj": "2025-09-19",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115133",
+      "name": "Sayem Ali Nabil",
+      "doj": "2025-09-19",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115130",
+      "name": "Nazmul Hoque1",
+      "doj": "2025-09-19",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115116",
+      "name": "Afsana Akther",
+      "doj": "2025-09-19",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115188",
+      "name": "Osama Bin Jahir",
+      "doj": "2025-10-17",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115190",
+      "name": "Jihanul Haque",
+      "doj": "2025-10-17",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115182",
+      "name": "Mahamudur Rahman",
+      "doj": "2025-10-17",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115178",
+      "name": "Kaiful Islam hridoy",
+      "doj": "2025-10-17",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115299",
+      "name": "Ziaul Mannan Anas",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115301",
+      "name": "Mohammad Hisamul Islam Sayed",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115291",
+      "name": "Rahul Devnath Robin",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115282",
+      "name": "MD.Ittesaf Islam",
+      "doj": "########",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115286",
+      "name": "Meharun Nesa Shila",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115353",
+      "name": "Shoibul Islam",
+      "doj": "2025-12-16",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "115349",
+      "name": "Mashrafe Bin Masud Rihan",
+      "doj": "2025-12-16",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115356",
+      "name": "Tajmira Tabassum",
+      "doj": "2025-12-16",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115358",
+      "name": "Israt Jahan",
+      "doj": "2025-12-16",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115366",
+      "name": "Nusrat Jahen Maha",
+      "doj": "2025-12-16",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115350",
+      "name": "Ajanta Kuri",
+      "doj": "2025-12-16",
+      "lob": "158",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115396",
+      "name": "Anowar Hossain Sabbir",
+      "doj": "2026-01-15",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115397",
+      "name": "Nishat Chowdhury",
+      "doj": "2026-01-15",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115388",
+      "name": "Umme tabassum",
+      "doj": "2026-01-20",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115460",
+      "name": "Siful Islam Shamim",
+      "doj": "2026-02-09",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "115457",
+      "name": "Abrar Sami",
+      "doj": "2026-02-09",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "115469",
+      "name": "Jahedul Islam Babu",
+      "doj": "2026-02-10",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115470",
+      "name": "Mohammad Rafiqul Islam",
+      "doj": "2026-02-10",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115465",
+      "name": "Md Saidul Islam",
+      "doj": "2026-02-10",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115454",
+      "name": "Mahmuda Sultana",
+      "doj": "2026-02-10",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115560",
+      "name": "Abdullah Al Mamur",
+      "doj": "2026-03-11",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "115551",
+      "name": "Sharmin Akter",
+      "doj": "2026-03-11",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115550",
+      "name": "Rahatunnesa Mimsa",
+      "doj": "2026-03-11",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115552",
+      "name": "Tinni Akter",
+      "doj": "2026-03-11",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115567",
+      "name": "Md Ahad Hossain Ricky",
+      "doj": "2026-03-11",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115583",
+      "name": "Hasnine MD Jonayed",
+      "doj": "2026-04-12",
+      "lob": "Live Chat",
+      "supervisor": "Md Zahidul Islam Siam",
+      "status": "Active"
+    },
+    {
+      "avaya": "115584",
+      "name": "Faria Sultana Pospa",
+      "doj": "2026-04-12",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115578",
+      "name": "Mohammed Mashruf Matin Sikder",
+      "doj": "2026-04-12",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115582",
+      "name": "Afroja Nusrat Prome",
+      "doj": "2026-04-14",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115654",
+      "name": "Ishrakul Karim Tonmoy",
+      "doj": "2026-05-07",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115644",
+      "name": "Mohammad Shihab Uddin",
+      "doj": "2026-05-08",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115656",
+      "name": "Nusrat Alam",
+      "doj": "2026-05-08",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115720",
+      "name": "Tawhid Mawrtuja Kakon",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115723",
+      "name": "Khondoker Shababul Bari",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115733",
+      "name": "Mahabub Talukder Rimon",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115731",
+      "name": "Mahir Mohd Shahriar",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115724",
+      "name": "Hafsatunnesa Rekmuna",
+      "doj": "########",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115732",
+      "name": "Sumi Akter",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115726",
+      "name": "Mohammed Talha Zobair",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115728",
+      "name": "Shipra Das",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115729",
+      "name": "Puja Debi Nath",
+      "doj": "########",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115781",
+      "name": "Md. Shahriar Kabir",
+      "doj": "2026-06-09",
+      "lob": "Retailer-456",
+      "supervisor": "Faria Sharmin Etu",
+      "status": "Active"
+    },
+    {
+      "avaya": "115788",
+      "name": "Hira Akter",
+      "doj": "2026-06-09",
+      "lob": "Outbound",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115778",
+      "name": "Shamim Osman",
+      "doj": "2026-06-09",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115773",
+      "name": "Sayed Farid Ul Islam",
+      "doj": "2026-06-09",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115769",
+      "name": "Anisul Islam",
+      "doj": "2026-06-09",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115786",
+      "name": "Kajol Rekha",
+      "doj": "2026-06-09",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115785",
+      "name": "Nahida Akter",
+      "doj": "2026-06-09",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115848",
+      "name": "Sayed Nazmul Islam",
+      "doj": "2026-07-03",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115856",
+      "name": "Abtahi Md. Ishfer",
+      "doj": "2026-07-03",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115872",
+      "name": "Md. Al Amin Arafat",
+      "doj": "2026-07-03",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115859",
+      "name": "Rafeul Hoq",
+      "doj": "2026-07-03",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115853",
+      "name": "Md. Araf Yasir",
+      "doj": "2026-07-03",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115851",
+      "name": "Gazi Saidul Hassan Tanvir",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115860",
+      "name": "Jawata Afnan",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115870",
+      "name": "Ayesha Akter Esha",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115876",
+      "name": "Sanjida Sultana",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115877",
+      "name": "Jannatul Nayem Juthi",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115873",
+      "name": "Durjoy Chakraborty",
+      "doj": "2026-07-03",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115869",
+      "name": "S.M Istiak",
+      "doj": "2026-07-05",
+      "lob": "Outbound",
+      "supervisor": "Mohammad Sabbir Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115865",
+      "name": "Saidul Islam",
+      "doj": "2026-07-05",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115863",
+      "name": "Mohammad Abdullah Al Amin",
+      "doj": "2026-07-07",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115882",
+      "name": "Md Rashedul Alam",
+      "doj": "2026-07-18",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115887",
+      "name": "Tokee Tahmid",
+      "doj": "2026-07-18",
+      "lob": "Premium",
+      "supervisor": "Md Ariful Islam Niloy",
+      "status": "Active"
+    },
+    {
+      "avaya": "115879",
+      "name": "Nusrat Islam Konok",
+      "doj": "2026-07-18",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115881",
+      "name": "Abdullah Al Foysal",
+      "doj": "2026-07-18",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115884",
+      "name": "Abu Nowhin",
+      "doj": "2026-07-18",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115886",
+      "name": "Avijit Paul",
+      "doj": "2026-07-18",
+      "lob": "Premium",
+      "supervisor": "Sattazit Gosh",
+      "status": "Active"
+    },
+    {
+      "avaya": "115920",
+      "name": "Samin Yeasar Mahi",
+      "doj": "2026-08-01",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115914",
+      "name": "Fauziah Mehzabin Ruhi",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115916",
+      "name": "Mst Najnin Sultana Sifat",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115909",
+      "name": "Md Jamal Mirddad",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115917",
+      "name": "Nur Sarowar",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115931",
+      "name": "Farjana Akter",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115921",
+      "name": "Nahidul Karim Tazve",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115918",
+      "name": "Sonjoy Chowdhury",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115928",
+      "name": "Karisma Das",
+      "doj": "2026-08-01",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115912",
+      "name": "Shibom Ghosh",
+      "doj": "2026-08-01",
+      "lob": "Premium",
+      "supervisor": "Shajjadul Rhythm",
+      "status": "Active"
+    },
+    {
+      "avaya": "115979",
+      "name": "Mahinur Rahman",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115980",
+      "name": "Roshan Hossain",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115981",
+      "name": "MD Nobab Sharif",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115983",
+      "name": "Tanha Akter Dina",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "115987",
+      "name": "Moinul Islam Ayath",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115988",
+      "name": "MD Refayetul Islam",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "115990",
+      "name": "Rokeya Akter Tinni",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "115994",
+      "name": "Sayeed MD Tanvir Hossain",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115975",
+      "name": "MD Abtahi Efaz Zaki",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115982",
+      "name": "Partho Roy",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115984",
+      "name": "Nirab Kanti Dey",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115993",
+      "name": "Shuvo Mondal",
+      "doj": "2026-08-25",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "115985",
+      "name": "Mrittika Das",
+      "doj": "2026-08-26",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116056",
+      "name": "Md Mohim",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116054",
+      "name": "Tofajjol Hossen Amjad",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116068",
+      "name": "Mahim Azad",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116066",
+      "name": "Md Shidul Islam Shehab",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116055",
+      "name": "MD Mihad Hossain Tutul",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116049",
+      "name": "Sabrina kashem",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116061",
+      "name": "Mohammad Foisal",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116069",
+      "name": "Arisul Arefin",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116058",
+      "name": "Uzzal Saha",
+      "doj": "2026-09-04",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116063",
+      "name": "MD Naim khan",
+      "doj": "2026-09-05",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116060",
+      "name": "Shamim Mridha",
+      "doj": "2026-09-05",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116067",
+      "name": "Rumanul Islam Showrav",
+      "doj": "2026-09-05",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116064",
+      "name": "Mahmudun Nobi",
+      "doj": "2026-09-05",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116107",
+      "name": "MD Shahidul Islam",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116092",
+      "name": "Md Masudor Rahman Al-Amin",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116098",
+      "name": "Mohammad Mobarak Hossain Mohin",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116102",
+      "name": "Intesar Hossain Jaohar",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116100",
+      "name": "Muhammad Afzal Forman",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116099",
+      "name": "Abidur Rashid Rafid",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116097",
+      "name": "Mahit Islam Chowdhury",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116106",
+      "name": "Shamsun Naher",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116104",
+      "name": "Robin Chowdhury",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116103",
+      "name": "Shahriar Islam",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116105",
+      "name": "Etisha Fatima Ali",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116095",
+      "name": "Tania Akter",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116101",
+      "name": "Akibur Rahaman",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116096",
+      "name": "Mondira Das",
+      "doj": "2026-09-22",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116155",
+      "name": "Mosammat Mahfuza Khatun",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116156",
+      "name": "Abeda Sultana Rupa",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116159",
+      "name": "Rabiya Nasrin Soniya",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116160",
+      "name": "Jannatul Ferdous",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116162",
+      "name": "Mahadi Hasan",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116167",
+      "name": "Towhidul Islam",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116168",
+      "name": "Md Hossain",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116169",
+      "name": "Akibur Rahman",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116170",
+      "name": "Yeasin Arafat Tushaar",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116172",
+      "name": "Syed Milad Mostakim",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116174",
+      "name": "Azmain Ahnaf Jim",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116158",
+      "name": "Rupa Chakraborty",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116165",
+      "name": "Rime Barua",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116166",
+      "name": "Shovik Chowdhury",
+      "doj": "2026-10-01",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116175",
+      "name": "Tanvir Hossain",
+      "doj": "2026-10-02",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116164",
+      "name": "Joyasree Nath",
+      "doj": "2026-10-06",
+      "lob": "Mass",
+      "supervisor": "Md Ariful Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116225",
+      "name": "Mukaddasha Mustari Saba",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116219",
+      "name": "Md Shahariar Alam",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116234",
+      "name": "Nafsan yash",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116227",
+      "name": "Tanha Akter",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116217",
+      "name": "Taslima Akter",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116232",
+      "name": "Farjana Rahman",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116216",
+      "name": "Md Sohanur Rahman",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116220",
+      "name": "Md Arif Hossain",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116215",
+      "name": "Kamrul Hasan",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116228",
+      "name": "Injamamul Haque Alvi",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116221",
+      "name": "Mohammad Ansar Ullah Shohan",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116223",
+      "name": "Mohammed Fahim Chowdhury",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116222",
+      "name": "Hasib Uddin Ahmed Chowdhury",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116224",
+      "name": "Mst. Istimum Haider",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116236",
+      "name": "Tasfiha Sultana Alve",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    },
+    {
+      "avaya": "116233",
+      "name": "Md Atikul Islam Tipu",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116229",
+      "name": "Mohammed Sajjad",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116235",
+      "name": "Md Erfanul Hoque",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116230",
+      "name": "Tinku Tripura",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Mohammad Imam Hossain",
+      "status": "Active"
+    },
+    {
+      "avaya": "116218",
+      "name": "Arpan Nath",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Sanjida Islam Tinny",
+      "status": "Active"
+    },
+    {
+      "avaya": "116231",
+      "name": "Shuvo Majumder",
+      "doj": "2026-10-19",
+      "lob": "Mass",
+      "supervisor": "Albin Gomez",
+      "status": "Active"
+    },
+    {
+      "avaya": "116247",
+      "name": "Aklima Sultana Mitu",
+      "doj": "",
+      "lob": "Mass",
+      "supervisor": "Nusrat Jahan Tamanna",
+      "status": "Active"
+    }
+  ]
 }
