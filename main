@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Call Analytics | Live Sync</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0e1a;
+            --bg-card: rgba(18, 24, 38, 0.85);
+            --border-glow: rgba(0, 242, 254, 0.25);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --cyan: #00f2fe;
+            --violet: #8b5cf6;
+            --blue: #3b82f6;
+            --success: #10b981;
+            --danger: #f43f5e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-base); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* Sidebar */
+        aside { width: 260px; background: rgba(10, 14, 26, 0.95); border-right: 1px solid var(--border-glow); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
+        .brand { padding: 24px; font-size: 1.1rem; font-weight: 700; color: var(--cyan); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .nav-links { list-style: none; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; }
+        .nav-links li { padding: 12px 16px; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+        .nav-links li:hover, .nav-links li.active { background: linear-gradient(90deg, rgba(0, 242, 254, 0.15), transparent); color: var(--cyan); border-left: 3px solid var(--cyan); }
+
+        /* Main Content */
+        main { margin-left: 260px; flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 25px; }
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 18px 25px; border-radius: 16px; border: 1px solid var(--border-glow); backdrop-filter: blur(12px); }
+        .header-title h1 { font-size: 1.4rem; font-weight: 700; color: #fff; }
+        .header-title p { font-size: 0.85rem; color: var(--text-muted); }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .btn-live { background: rgba(0, 242, 254, 0.1); border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-live:hover { background: var(--cyan); color: #000; }
+
+        /* KPI Cards Grid */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .kpi-card { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
+        .kpi-card::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--cyan); }
+        .kpi-title { font-size: 0.85rem; color: var(--text-muted); }
+        .kpi-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .kpi-sub { font-size: 0.75rem; color: var(--success); }
+
+        /* Charts Section */
+        .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .chart-box { background: var(--bg-card); border: 1px solid var(--border-glow); border-radius: 16px; padding: 22px; backdrop-filter: blur(10px); }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .chart-header h3 { font-size: 1rem; font-weight: 600; color: #fff; }
+        .canvas-container { position: relative; height: 280px; width: 100%; }
+
+        /* Tables */
+        .tables-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .data-table th, .data-table td { padding: 12px 14px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .data-table th { color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.02); }
+        .data-table tr:hover { background: rgba(0, 242, 254, 0.03); }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge.inbound { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge.outbound { background: rgba(244, 63, 94, 0.15); color: var(--danger); }
+
+        /* Modal Popup Styling */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: #121826; border: 1px solid var(--cyan); padding: 30px; border-radius: 16px; width: 450px; display: flex; flex-direction: column; gap: 15px; }
+        .modal-content h3 { color: var(--cyan); margin-bottom: 5px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-size: 0.8rem; color: var(--text-muted); }
+        .form-group input, .form-group select { background: #0a0e1a; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.9rem; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+        .btn-submit { background: var(--cyan); color: #000; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        @media(max-width: 1024px) {
+            .charts-grid, .tables-grid { grid-template-columns: 1fr; }
+            aside { width: 70px; }
+            aside .brand span, aside .nav-links span { display: none; }
+            main { margin-left: 70px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside>
+        <div class="brand">⚡ <span>CyberCall</span></div>
+        <ul class="nav-links">
+            <li class="active">📊 <span>Overview</span></li>
+            <li onclick="alert('Switching to Call Log view')">📞 <span>Call Details</span></li>
+            <li onclick="alert('Switching to Supervisors view')">👑 <span>Supervisors</span></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Supervisor Call Analytics Dashboard</h1>
+                <p>Real-time Google Sheet Live Sync & Call Logging</p>
+            </div>
+            <div class="header-actions">
+                <span style="font-size: 0.85rem; color: var(--success);">● Live Connected</span>
+                <button class="btn-live" onclick="openModal()">+ Log New Call</button>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-title">Total Calls Logged</span>
+                <span class="kpi-value" id="kpi-total">13</span>
+                <span class="kpi-sub">▲ Google Sheet Sync</span>
+            </div>
+            <div class="kpi-card" style="--cyan: var(--violet)">
+                <span class="kpi-title">Active Supervisors</span>
+                <span class="kpi-value">11</span>
+                <span class="kpi-sub" style="color: var(--violet)">Team Leads Active</span>
+            </div>
+            <div class="kpi-card" style="--cyan: var(--blue)">
+                <span class="kpi-title">Total Roster Agents</span>
+                <span class="kpi-value">230</span>
+                <span class="kpi-sub" style="color: var(--blue)">CTG Site</span>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-header"><h3>Call Volume Trend</h3></div>
+                <div class="canvas-container"><canvas id="trendChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-header"><h3>Supervisor Distribution</h3></div>
+                <div class="canvas-container"><canvas id="supPieChart"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Log Call Modal -->
+    <div class="modal" id="callModal">
+        <div class="modal-content">
+            <h3>Log New Supervisor Call</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Enter details to push directly to Google Sheet.</p>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="callDate" value="2026-11-01">
+            </div>
+            <div class="form-group">
+                <label>Dialed MSISDN</label>
+                <input type="text" id="callMsisdn" placeholder="e.g. 1759018235">
+            </div>
+            <div class="form-group">
+                <label>AVAYA ID</label>
+                <input type="text" id="callAvaya" placeholder="e.g. 115582">
+            </div>
+            <div class="form-group">
+                <label>Transferred By (CSA Name)</label>
+                <input type="text" id="callCsa" placeholder="e.g. Afroja Nusrat Prome">
+            </div>
+            <div class="form-group">
+                <label>Supervisor in Call</label>
+                <select id="callSup">
+                    <option>Sattazit Gosh</option>
+                    <option>Sanjida Islam Tinny</option>
+                    <option>Mohammad Imam Hossain</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Call Type</label>
+                <select id="callType">
+                    <option>Inbound</option>
+                    <option>Outbound</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-submit" onclick="submitCall()">Submit to Sheet</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+        const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+        function openModal() { document.getElementById('callModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('callModal').style.display = 'none'; }
+
+        async function submitCall() {
+            const payload = {
+                date: document.getElementById('callDate').value,
+                msisdn: document.getElementById('callMsisdn').value,
+                avaya: document.getElementById('callAvaya').value,
+                csa: document.getElementById('callCsa').value,
+                sup: document.getElementById('callSup').value,
+                type: document.getElementById('callType').value
+            };
+
+            if(!payload.msisdn || !payload.avaya) {
+                alert("Please fill in MSISDN and AVAYA ID.");
+                return;
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                alert("Call successfully logged and sent to Google Sheet!");
+                closeModal();
+                location.reload();
+            } catch (err) {
+                alert("Error sending to sheet: " + err);
+            }
+        }
+
+        // Charts Init
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
+        
+        new Chart(document.getElementById('trendChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Nov 1', 'Nov 2', 'Nov 3', 'Nov 4', 'Nov 5', 'Nov 6'],
+                datasets: [{ data: [13, 0, 0, 0, 0, 6], backgroundColor: '#00f2fe', borderRadius: 6 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        new Chart(document.getElementById('supPieChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Sattazit Gosh', 'Sanjida Tinny', 'Imam Hossain'],
+                datasets: [{ data: [6, 4, 3], backgroundColor: ['#00f2fe', '#8b5cf6', '#3b82f6'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+    </script>
+</body>
+</html>
