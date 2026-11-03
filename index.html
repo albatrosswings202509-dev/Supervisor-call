@@ -32,24 +32,38 @@
   <header class="sticky top-0 z-40 border-b border-cyan-500/20 bg-obsidian/90 backdrop-blur-md px-4 py-3">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyanGlow to-neonViolet flex items-center justify-center shadow-lg flex-shrink-0"><svg class="w-6 h-6 text-obsidian" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyanGlow to-neonViolet flex items-center justify-center shadow-lg flex-shrink-0">
+          <svg class="w-6 h-6 text-obsidian" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+        </div>
         <div class="text-center sm:text-left">
           <h1 class="text-lg sm:text-xl font-extrabold bg-gradient-to-r from-cyanGlow to-neonViolet bg-clip-text text-transparent">SUPERVISOR CALL TRACKER</h1>
-          <div class="text-[10px] sm:text-xs text-slate-400 flex items-center justify-center sm:justify-start gap-1.5"><span id="syncIndicator" class="w-2 h-2 rounded-full bg-emerald-400"></span><span id="lastSyncText">Instant Sync Active</span></div>
+          <div class="text-[10px] sm:text-xs text-slate-400 flex items-center justify-center sm:justify-start gap-1.5">
+            <span id="syncIndicator" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span id="lastSyncText">Instant Sync Active</span>
+          </div>
         </div>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
-        <div class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs flex items-center gap-2"><span class="text-slate-400">Date:</span><input type="date" id="activeDateSelect" class="bg-transparent text-cyanGlow font-bold outline-none cursor-pointer w-24 sm:w-auto" /></div>
-        <button onclick="syncData(true)" class="p-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-300 hover:text-cyanGlow"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
-        <button onclick="toggleTheme()" class="p-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-300 hover:text-neonViolet"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></button>
-        <button onclick="openAddCallModal()" class="gradient-btn px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Add Call</button>
+        <div class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs flex items-center gap-2">
+          <span class="text-slate-400">Date:</span>
+          <input type="date" id="activeDateSelect" class="bg-transparent text-cyanGlow font-bold outline-none cursor-pointer w-28 sm:w-auto" />
+        </div>
+        <button onclick="syncData(true)" class="p-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-300 hover:text-cyanGlow" title="Sync Now">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </button>
+        <button onclick="toggleTheme()" class="p-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-300 hover:text-neonViolet" title="Toggle Theme">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+        <button onclick="openAddCallModal()" class="gradient-btn px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>Add Call
+        </button>
       </div>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- 1. KPI CARDS -->
+    <!-- 1. KPI CARDS (3 Cards) -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <div class="cyber-card rounded-2xl p-5">
         <div class="flex justify-between items-start">
@@ -72,68 +86,167 @@
       </div>
     </section>
 
-    <!-- 2. CHARTS -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <!-- 2. SUPERVISOR LEADERBOARD (IN/OUT COMPARE) & TEAM WISE TRANSFER -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Supervisor Leaderboard with Inbound & Outbound Split -->
       <div class="cyber-card rounded-2xl p-5 flex flex-col justify-between">
-        <div class="flex items-center justify-between gap-2 mb-4">
-          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-cyanGlow inline-block mr-1"></span> Supervisor Leaderboard</h3>
-          <div class="flex text-xs bg-slate-900 border border-slate-700 p-1 rounded"><button id="supToggleMonthly" onclick="setSupervisorMode('monthly')" class="px-2 py-1 rounded bg-cyanGlow text-obsidian font-bold">Month</button><button id="supToggleDaily" onclick="setSupervisorMode('daily')" class="px-2 py-1 rounded text-slate-400">Day</button></div>
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-cyanGlow inline-block mr-1"></span> Supervisor Leaderboard</h3>
+              <p class="text-[11px] text-slate-400">Inbound vs Outbound per supervisor</p>
+            </div>
+            <div class="flex text-xs bg-slate-900 border border-slate-700 p-1 rounded">
+              <button id="supToggleMonthly" onclick="setSupervisorMode('monthly')" class="px-2.5 py-1 rounded bg-cyanGlow text-obsidian font-bold">Month</button>
+              <button id="supToggleDaily" onclick="setSupervisorMode('daily')" class="px-2.5 py-1 rounded text-slate-400">Day</button>
+            </div>
+          </div>
+          <div id="supervisorLeaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
         </div>
-        <div id="supervisorLeaderboardList" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
       </div>
+
+      <!-- Team Wise Transfer -->
       <div class="cyber-card rounded-2xl p-5">
-        <h3 class="font-bold text-white mb-4 text-sm sm:text-base"><span class="w-2 h-4 bg-neonViolet inline-block mr-1"></span> TL Impact</h3>
-        <div class="h-64 relative"><canvas id="tlImpactChart"></canvas></div>
-      </div>
-      <div class="cyber-card rounded-2xl p-5">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-emerald-400 inline-block mr-1"></span> Call Trend</h3>
-          <div class="flex text-xs bg-slate-900 border border-slate-700 p-1 rounded"><button id="trendBtnLine" onclick="setTrendChartType('line')" class="px-2 py-1 rounded bg-cyanGlow text-obsidian font-bold">Line</button><button id="trendBtnBar" onclick="setTrendChartType('bar')" class="px-2 py-1 rounded text-slate-400">Bar</button></div>
+        <div class="mb-4">
+          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-neonViolet inline-block mr-1"></span> Team Wise Transfer</h3>
+          <p class="text-[11px] text-slate-400">Calls transferred by associates under each Team Leader</p>
         </div>
-        <div class="h-64 relative"><canvas id="dailyTrendChart"></canvas></div>
+        <div class="h-80 relative"><canvas id="tlImpactChart"></canvas></div>
       </div>
     </section>
 
-    <!-- 3. DAY-WISE TRANSFER & LOG -->
-    <section class="cyber-card rounded-2xl p-5 space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-cyanGlow to-neonViolet inline-block mr-1"></span> Day-wise Transfer</h3>
-        <div class="flex gap-2 items-center"><span id="filteredCallCountBadge" class="text-xs bg-cyan-900/50 text-cyanGlow px-3 py-1 rounded-full font-bold border border-cyan-500/30">0 Records</span><button onclick="resetCallFilters()" class="text-xs border border-slate-700 px-3 py-1 rounded hover:text-cyanGlow">Reset Filters</button></div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-8 gap-2 sm:gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-800 mb-4">
-        <div class="col-span-2 lg:col-span-2"><label class="text-[10px] text-slate-400 uppercase">Search</label><input type="text" id="searchInput" oninput="applyCallFilters()" placeholder="MSISDN, Name, AVAYA..." class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white"/></div>
-        <div class="col-span-1"><label class="text-[10px] text-cyanGlow font-bold uppercase">Exact Date</label><input type="date" id="filterExactDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-cyan-500/50 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
-        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">From Date</label><input type="date" id="filterStartDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
-        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">To Date</label><input type="date" id="filterEndDate" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
-        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">Supervisor</label><select id="filterSupervisor" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
-        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">Team Leader</label><select id="filterTL" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
-        <div class="col-span-1 flex gap-2">
-          <div class="w-1/2"><label class="text-[10px] text-slate-400 uppercase">Skill</label><select id="filterSkill" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
-          <div class="w-1/2"><label class="text-[10px] text-slate-400 uppercase">Type</label><select id="filterCallType" onchange="applyCallFilters()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option><option value="Inbound">Inbound</option><option value="Outbound">Outbound</option></select></div>
-        </div>
-      </div>
-      <div class="overflow-x-auto border border-slate-800 rounded-lg">
-        <!-- Columns fixed: Tenure removed -->
-        <table class="w-full text-xs text-center min-w-[800px]"><thead class="bg-slate-900 border-b border-slate-800 text-slate-300 uppercase text-[10px]"><th class="p-3">#</th><th class="p-3">Date</th><th class="p-3">MSISDN</th><th class="p-3">AVAYA</th><th class="p-3">CSA Name</th><th class="p-3">TL</th><th class="p-3">Skill</th><th class="p-3">Supervisor</th><th class="p-3">Type</th><th class="p-3">Remarks</th></thead><tbody id="callLogTableBody" class="divide-y divide-slate-800/70"></tbody></table>
-      </div>
-    </section>
-
-    <!-- 4. TOP TRANSFER DATA TABS (2 Tabs) -->
+    <!-- 2B. CALL TREND (SEPARATE FULL-WIDTH 30 DAYS BAR CHART) -->
     <section class="cyber-card rounded-2xl p-5">
-      <div class="flex flex-col sm:flex-row justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
-        <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-neonViolet to-cyanGlow inline-block mr-1"></span> Top Transfer Data</h3>
-        <div class="flex gap-2 w-full sm:w-auto">
-          <button id="tabBtnTopAssoc" onclick="switchTrackerTab('topAssoc')" class="tab-active flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-xs font-bold border border-slate-700 transition whitespace-nowrap">1. Top Transferring</button>
-          <button id="tabBtnRepeatMsisdn" onclick="switchTrackerTab('repeatMsisdn')" class="flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400 border border-slate-700 hover:border-cyanGlow transition whitespace-nowrap">2. Repeat MSISDN Alert</button>
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div>
+          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-emerald-400 inline-block mr-1"></span> Call Trend (30 Days Bar View)</h3>
+          <p class="text-[11px] text-slate-400">Full 30-day monthly bar chart (Inbound vs Outbound)</p>
+        </div>
+        <span id="trendMonthLabel" class="text-xs px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">30 Days View</span>
+      </div>
+      <div class="overflow-x-auto pb-2">
+        <div class="h-72 min-w-[780px] relative">
+          <canvas id="dailyTrendChart"></canvas>
         </div>
       </div>
-      <!-- Removed DOJ and Tenure -->
-      <div id="tabPanelTopAssoc" class="overflow-x-auto border border-slate-800 rounded-lg"><table class="w-full text-xs text-center min-w-[500px]"><thead class="bg-slate-900 text-slate-300 border-b border-slate-800 uppercase text-[10px]"><th class="p-3">Rank</th><th class="p-3">AVAYA ID</th><th class="p-3">Name</th><th class="p-3">Team Leader</th><th class="p-3">Skill</th><th class="p-3">Transfers</th></thead><tbody id="topAssociatesBody" class="divide-y divide-slate-800/70"></tbody></table></div>
-      <div id="tabPanelRepeatMsisdn" class="hidden overflow-x-auto border border-slate-800 rounded-lg"><table class="w-full text-xs text-center min-w-[500px]"><thead class="bg-slate-900 text-slate-300 border-b border-slate-800 uppercase text-[10px]"><th class="p-3">Rank</th><th class="p-3">MSISDN</th><th class="p-3">Total Calls</th><th class="p-3">Last Date</th><th class="p-3">Last Supervisor</th><th class="p-3">Action</th></thead><tbody id="repeatMsisdnBody" class="divide-y divide-slate-800/70"></tbody></table></div>
+    </section>
+
+    <!-- 3. TOP TRANSFER DATA (MOVED UP + PAGINATION 10/15/25/50) -->
+    <section class="cyber-card rounded-2xl p-5 space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
+        <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-neonViolet to-cyanGlow inline-block mr-1"></span> Top Transfer Data</h3>
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <div class="flex items-center gap-1.5 text-xs bg-slate-900 border border-slate-700 px-2.5 py-1 rounded-lg">
+            <span class="text-slate-400">Show:</span>
+            <select id="topDataPageSize" onchange="changeTopDataPageSize()" class="bg-transparent text-cyanGlow font-bold outline-none cursor-pointer">
+              <option value="10" class="bg-slate-900">10</option>
+              <option value="15" selected class="bg-slate-900">15</option>
+              <option value="25" class="bg-slate-900">25</option>
+              <option value="50" class="bg-slate-900">50</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <button id="tabBtnTopAssoc" onclick="switchTrackerTab('topAssoc')" class="tab-active px-3.5 py-1.5 rounded-lg text-xs font-bold border border-slate-700 transition whitespace-nowrap">1. Top Transferring</button>
+            <button id="tabBtnRepeatMsisdn" onclick="switchTrackerTab('repeatMsisdn')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 border border-slate-700 hover:border-cyanGlow transition whitespace-nowrap">2. Repeat MSISDN Alert</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 1: Top Transferring -->
+      <div id="tabPanelTopAssoc" class="space-y-3">
+        <div class="overflow-x-auto border border-slate-800 rounded-lg">
+          <table class="w-full text-xs text-center min-w-[500px]">
+            <thead class="bg-slate-900 text-slate-300 border-b border-slate-800 uppercase text-[10px]">
+              <tr><th class="p-3">Rank</th><th class="p-3">AVAYA ID</th><th class="p-3">Name</th><th class="p-3">Team Leader</th><th class="p-3">Skill</th><th class="p-3">Transfers</th></tr>
+            </thead>
+            <tbody id="topAssociatesBody" class="divide-y divide-slate-800/70"></tbody>
+          </table>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+          <span id="topAssocPageInfo" class="text-slate-400">Showing 0-0 of 0</span>
+          <div class="flex items-center gap-2">
+            <button id="topAssocPrevBtn" onclick="changeTopAssocPage(-1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Previous Page</button>
+            <span id="topAssocPageIndicator" class="font-bold text-cyanGlow px-2">Page 1</span>
+            <button id="topAssocNextBtn" onclick="changeTopAssocPage(1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Next Page</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Repeat MSISDN Alert -->
+      <div id="tabPanelRepeatMsisdn" class="hidden space-y-3">
+        <div class="overflow-x-auto border border-slate-800 rounded-lg">
+          <table class="w-full text-xs text-center min-w-[500px]">
+            <thead class="bg-slate-900 text-slate-300 border-b border-slate-800 uppercase text-[10px]">
+              <tr><th class="p-3">Rank</th><th class="p-3">MSISDN</th><th class="p-3">Total Calls</th><th class="p-3">Last Date</th><th class="p-3">Last Supervisor</th><th class="p-3">Action</th></tr>
+            </thead>
+            <tbody id="repeatMsisdnBody" class="divide-y divide-slate-800/70"></tbody>
+          </table>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+          <span id="repeatMsisdnPageInfo" class="text-slate-400">Showing 0-0 of 0</span>
+          <div class="flex items-center gap-2">
+            <button id="repeatMsisdnPrevBtn" onclick="changeRepeatMsisdnPage(-1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Previous Page</button>
+            <span id="repeatMsisdnPageIndicator" class="font-bold text-cyanGlow px-2">Page 1</span>
+            <button id="repeatMsisdnNextBtn" onclick="changeRepeatMsisdnPage(1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Next Page</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. DAY-WISE TRANSFER (MOVED DOWN + PAGINATION UP TO 50) -->
+    <section class="cyber-card rounded-2xl p-5 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-cyanGlow to-neonViolet inline-block mr-1"></span> Day-wise Transfer</h3>
+        <div class="flex flex-wrap gap-2 items-center">
+          <div class="flex items-center gap-1.5 text-xs bg-slate-900 border border-slate-700 px-2.5 py-1 rounded-lg">
+            <span class="text-slate-400">View:</span>
+            <select id="callLogPageSize" onchange="changeCallLogPageSize()" class="bg-transparent text-cyanGlow font-bold outline-none cursor-pointer">
+              <option value="10" class="bg-slate-900">10</option>
+              <option value="15" selected class="bg-slate-900">15</option>
+              <option value="25" class="bg-slate-900">25</option>
+              <option value="50" class="bg-slate-900">50</option>
+            </select>
+          </div>
+          <span id="filteredCallCountBadge" class="text-xs bg-cyan-900/50 text-cyanGlow px-3 py-1 rounded-full font-bold border border-cyan-500/30">0 Records</span>
+          <button onclick="resetCallFilters()" class="text-xs border border-slate-700 px-3 py-1 rounded hover:text-cyanGlow">Reset Filters</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-8 gap-2 sm:gap-3 bg-slate-900/50 p-3 rounded-xl border border-slate-800 mb-4">
+        <div class="col-span-2 lg:col-span-2"><label class="text-[10px] text-slate-400 uppercase">Search</label><input type="text" id="searchInput" oninput="onFilterInput()" placeholder="MSISDN, Name, AVAYA..." class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white"/></div>
+        <div class="col-span-1"><label class="text-[10px] text-cyanGlow font-bold uppercase">Exact Date</label><input type="date" id="filterExactDate" onchange="onFilterInput()" class="w-full bg-slate-950 border border-cyan-500/50 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
+        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">From Date</label><input type="date" id="filterStartDate" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
+        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">To Date</label><input type="date" id="filterEndDate" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none focus:border-cyanGlow text-white cursor-pointer"/></div>
+        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">Supervisor</label><select id="filterSupervisor" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
+        <div class="col-span-1"><label class="text-[10px] text-slate-400 uppercase">Team Leader</label><select id="filterTL" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
+        <div class="col-span-1 flex gap-2">
+          <div class="w-1/2"><label class="text-[10px] text-slate-400 uppercase">Skill</label><select id="filterSkill" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option></select></div>
+          <div class="w-1/2"><label class="text-[10px] text-slate-400 uppercase">Type</label><select id="filterCallType" onchange="onFilterInput()" class="w-full bg-slate-950 border border-slate-700 rounded px-1 sm:px-2 py-1.5 text-xs outline-none text-white"><option value="ALL">All</option><option value="Inbound">Inbound</option><option value="Outbound">Outbound</option></select></div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto border border-slate-800 rounded-lg">
+        <table class="w-full text-xs text-center min-w-[800px]">
+          <thead class="bg-slate-900 border-b border-slate-800 text-slate-300 uppercase text-[10px]">
+            <tr><th class="p-3">#</th><th class="p-3">Date</th><th class="p-3">MSISDN</th><th class="p-3">AVAYA</th><th class="p-3">CSA Name</th><th class="p-3">TL</th><th class="p-3">Skill</th><th class="p-3">Supervisor</th><th class="p-3">Type</th><th class="p-3">Remarks</th></tr>
+          </thead>
+          <tbody id="callLogTableBody" class="divide-y divide-slate-800/70"></tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Controls for Day-wise Transfer -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+        <span id="callLogPageInfo" class="text-slate-400">Showing 0-0 of 0</span>
+        <div class="flex items-center gap-2">
+          <button id="callLogPrevBtn" onclick="changeCallLogPage(-1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Previous Page</button>
+          <span id="callLogPageIndicator" class="font-bold text-cyanGlow px-2">Page 1</span>
+          <button id="callLogNextBtn" onclick="changeCallLogPage(1)" class="px-3 py-1 rounded border border-slate-700 bg-slate-900 text-slate-300 hover:border-cyanGlow disabled:opacity-40 disabled:pointer-events-none">Next Page</button>
+        </div>
+      </div>
     </section>
   </main>
 
-  <!-- ADD CALL MODAL -->
+  <!-- ADD CALL MODAL (Kazi Md.Tareque Removed) -->
   <div id="addCallModal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center p-4">
     <div class="cyber-card rounded-xl max-w-lg w-full p-5 space-y-4">
       <div class="flex justify-between border-b border-slate-800 pb-2"><h3 class="font-bold text-cyanGlow">Add Call (Instant Sync)</h3><button onclick="closeAddCallModal()" class="text-slate-400 text-lg leading-none">&times;</button></div>
@@ -141,7 +254,24 @@
         <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Date *</label><input type="date" id="inputDate" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">MSISDN *</label><input type="text" id="inputMsisdn" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div></div>
         <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">AVAYA ID *</label><input type="text" id="inputAvaya" required oninput="autoFillAgentByAvaya(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">CSA Name *</label><input type="text" id="inputCsaName" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div></div>
         <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Team Leader *</label><input type="text" id="inputTeamLeader" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">Skill *</label><select id="inputSkill" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Mass</option><option>Premium</option><option>Retailer-456</option><option>Live Chat</option><option>Outbound</option><option>158</option></select></div></div>
-        <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Supervisor in Call *</label><select id="inputSupervisorInCall" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Sattazit Gosh</option><option>Sanjida Islam Tinny</option><option>Mohammad Imam Hossain</option><option>Fahad Hridoy</option><option>Faria Sharmin Etu</option><option>Mohammad Sabbir Hossain</option><option>Nusrat Jahan Tamanna</option><option>Kazi Md.Tareque</option><option>Md Zahidul Islam Siam</option><option>Md Ariful Islam Niloy</option><option>Shajjadul Rhythm</option></select></div><div><label class="block text-slate-300 mb-1">Call Type *</label><select id="inputCallType" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Inbound</option><option>Outbound</option></select></div></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 mb-1">Supervisor in Call *</label>
+            <select id="inputSupervisorInCall" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow">
+              <option>Sattazit Gosh</option>
+              <option>Sanjida Islam Tinny</option>
+              <option>Mohammad Imam Hossain</option>
+              <option>Fahad Hridoy</option>
+              <option>Faria Sharmin Etu</option>
+              <option>Mohammad Sabbir Hossain</option>
+              <option>Nusrat Jahan Tamanna</option>
+              <option>Md Zahidul Islam Siam</option>
+              <option>Md Ariful Islam Niloy</option>
+              <option>Shajjadul Rhythm</option>
+            </select>
+          </div>
+          <div><label class="block text-slate-300 mb-1">Call Type *</label><select id="inputCallType" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Inbound</option><option>Outbound</option></select></div>
+        </div>
         <div><label class="block text-slate-300 mb-1">Remarks</label><input type="text" id="inputRemarks" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div>
         <div id="submitStatusMsg" class="hidden text-xs font-bold p-2 rounded text-center mt-2"></div>
         <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeAddCallModal()" class="px-4 py-1.5 border border-slate-700 rounded text-slate-300">Cancel</button><button type="submit" id="submitCallBtn" class="gradient-btn px-5 py-1.5 rounded">Save Call</button></div>
