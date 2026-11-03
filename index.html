@@ -86,36 +86,32 @@
       </div>
     </section>
 
-    <!-- 2. SUPERVISOR LEADERBOARD (IN/OUT COMPARE) & TEAM WISE TRANSFER -->
-    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-      <!-- Supervisor Leaderboard with Inbound & Outbound Split -->
-      <div class="cyber-card rounded-2xl p-5 flex flex-col justify-between">
+    <!-- 2A. SUPERVISOR LEADERBOARD (LANDSCAPE - ALL SUPERVISORS VISIBLE TOGETHER ON MOBILE & PC) -->
+    <section class="cyber-card rounded-2xl p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
         <div>
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <div>
-              <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-cyanGlow inline-block mr-1"></span> Supervisor Leaderboard</h3>
-              <p class="text-[11px] text-slate-400">Inbound vs Outbound per supervisor</p>
-            </div>
-            <div class="flex text-xs bg-slate-900 border border-slate-700 p-1 rounded">
-              <button id="supToggleMonthly" onclick="setSupervisorMode('monthly')" class="px-2.5 py-1 rounded bg-cyanGlow text-obsidian font-bold">Month</button>
-              <button id="supToggleDaily" onclick="setSupervisorMode('daily')" class="px-2.5 py-1 rounded text-slate-400">Day</button>
-            </div>
-          </div>
-          <div id="supervisorLeaderboardList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
+          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-cyanGlow inline-block mr-1"></span> Supervisor Leaderboard</h3>
+          <p class="text-[11px] text-slate-400">Landscape view — Inbound vs Outbound per supervisor</p>
+        </div>
+        <div class="flex text-xs bg-slate-900 border border-slate-700 p-1 rounded">
+          <button id="supToggleMonthly" onclick="setSupervisorMode('monthly')" class="px-2.5 py-1 rounded bg-cyanGlow text-obsidian font-bold">Month</button>
+          <button id="supToggleDaily" onclick="setSupervisorMode('daily')" class="px-2.5 py-1 rounded text-slate-400">Day</button>
         </div>
       </div>
-
-      <!-- Team Wise Transfer -->
-      <div class="cyber-card rounded-2xl p-5">
-        <div class="mb-4">
-          <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-neonViolet inline-block mr-1"></span> Team Wise Transfer</h3>
-          <p class="text-[11px] text-slate-400">Calls transferred by associates under each Team Leader</p>
-        </div>
-        <div class="h-80 relative"><canvas id="tlImpactChart"></canvas></div>
-      </div>
+      <!-- Landscape Multi-Column Grid so all 10 supervisors show at once without scrolling -->
+      <div id="supervisorLeaderboardList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5"></div>
     </section>
 
-    <!-- 2B. CALL TREND (SEPARATE FULL-WIDTH 30 DAYS BAR CHART) -->
+    <!-- 2B. TEAM WISE TRANSFER -->
+    <section class="cyber-card rounded-2xl p-5">
+      <div class="mb-4">
+        <h3 class="font-bold text-white text-sm sm:text-base"><span class="w-2 h-4 bg-neonViolet inline-block mr-1"></span> Team Wise Transfer</h3>
+        <p class="text-[11px] text-slate-400">Calls transferred by associates under each Team Leader</p>
+      </div>
+      <div class="h-72 relative"><canvas id="tlImpactChart"></canvas></div>
+    </section>
+
+    <!-- 2C. CALL TREND (SEPARATE FULL-WIDTH 30 DAYS BAR CHART) -->
     <section class="cyber-card rounded-2xl p-5">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
         <div>
@@ -131,7 +127,7 @@
       </div>
     </section>
 
-    <!-- 3. TOP TRANSFER DATA (MOVED UP + PAGINATION 10/15/25/50) -->
+    <!-- 3. TOP TRANSFER DATA (PAGINATION 10/15/25/50) -->
     <section class="cyber-card rounded-2xl p-5 space-y-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
         <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-neonViolet to-cyanGlow inline-block mr-1"></span> Top Transfer Data</h3>
@@ -193,7 +189,7 @@
       </div>
     </section>
 
-    <!-- 4. DAY-WISE TRANSFER (MOVED DOWN + PAGINATION UP TO 50) -->
+    <!-- 4. DAY-WISE TRANSFER (PAGINATION UP TO 50) -->
     <section class="cyber-card rounded-2xl p-5 space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
         <h3 class="text-lg font-bold text-white"><span class="w-2.5 h-6 rounded bg-gradient-to-b from-cyanGlow to-neonViolet inline-block mr-1"></span> Day-wise Transfer</h3>
@@ -234,7 +230,6 @@
         </table>
       </div>
 
-      <!-- Pagination Controls for Day-wise Transfer -->
       <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
         <span id="callLogPageInfo" class="text-slate-400">Showing 0-0 of 0</span>
         <div class="flex items-center gap-2">
@@ -246,14 +241,14 @@
     </section>
   </main>
 
-  <!-- ADD CALL MODAL (Kazi Md.Tareque Removed) -->
+  <!-- ADD CALL MODAL -->
   <div id="addCallModal" class="fixed inset-0 z-50 hidden bg-black/80 flex items-center justify-center p-4">
     <div class="cyber-card rounded-xl max-w-lg w-full p-5 space-y-4">
       <div class="flex justify-between border-b border-slate-800 pb-2"><h3 class="font-bold text-cyanGlow">Add Call (Instant Sync)</h3><button onclick="closeAddCallModal()" class="text-slate-400 text-lg leading-none">&times;</button></div>
       <form id="addCallForm" onsubmit="submitNewCall(event)" class="space-y-3 text-xs">
         <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Date *</label><input type="date" id="inputDate" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">MSISDN *</label><input type="text" id="inputMsisdn" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div></div>
         <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">AVAYA ID *</label><input type="text" id="inputAvaya" required oninput="autoFillAgentByAvaya(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">CSA Name *</label><input type="text" id="inputCsaName" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div></div>
-        <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Team Leader *</label><input type="text" id="inputTeamLeader" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">Skill *</label><select id="inputSkill" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Mass</option><option>Premium</option><option>Retailer-456</option><option>Live Chat</option><option>Outbound</option><option>158</option></select></div></div>
+        <div class="grid grid-cols-2 gap-3"><div><label class="block text-slate-300 mb-1">Team Leader *</label><input type="text" id="inputTeamLeader" required class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow" /></div><div><label class="block text-slate-300 mb-1">Skill *</label><select id="inputSkill" class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-white outline-none focus:border-cyanGlow"><option>Mass</option><option>Premium</option><option>Retailer-456</option><option>158</option><option>Live Chat</option><option>Outbound</option></select></div></div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-slate-300 mb-1">Supervisor in Call *</label>
