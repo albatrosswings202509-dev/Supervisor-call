@@ -1,10 +1,10 @@
 /**
  * SUPERVISOR CALL ANALYTICS - ENGINE (app.js)
  * Features:
- * - Supervisor Leaderboard with Inbound vs Outbound split (Kazi Tareque excluded)
- * - 30-Day Full-Width Bar Chart for Call Trend
- * - Pagination (10/15/25/50) with Previous/Next Page on Top Transfer Data & Day-wise Transfer
- * - Timezone-safe Date Handling & Instant LocalStorage Cache
+ * - Landscape Supervisor Leaderboard (all 10 visible together on Mobile & PC)
+ * - Skill Breakdown displays 158 instead of Live Chat
+ * - Top Date Picker automatically selects Today's Date on load
+ * - Dynamic Alignment Sheet lookup (any change in Alignment auto-updates Name/TL/Skill across dashboard)
  */
 const GITHUB_PAT = "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";
 const GH_OWNER = "albatrosswings202509-dev";
@@ -84,14 +84,42 @@ function getTodayDateStr() {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// Reconcile Call records with latest Alignment sheet data so any Alignment edit reflects automatically
+function reconcileCallsWithAlignment() {
+  const alignMap = {};
+  (appData.alignment || []).forEach(a => {
+    if (a && a.avaya) {
+      alignMap[String(a.avaya).trim()] = a;
+    }
+  });
+
+  appData.calls = (appData.calls || []).map(c => {
+    const avayaKey = String(c.avaya || "").trim();
+    const matched = alignMap[avayaKey];
+    return {
+      ...c,
+      date: normalizeDate(c.date),
+      csaName: (matched && matched.name) ? matched.name : c.csaName,
+      teamLeader: (matched && matched.supervisor) ? matched.supervisor : c.teamLeader,
+      skill: (matched && matched.lob) ? matched.lob : c.skill
+    };
+  });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  // Always default top Date selector & Add Call date to Today's Date
+  const today = getTodayDateStr();
+  const actEl = document.getElementById("activeDateSelect");
+  if (actEl) actEl.value = today;
+  const inpEl = document.getElementById("inputDate");
+  if (inpEl) inpEl.value = today;
+
   const cachedData = localStorage.getItem("supervisorAppCache");
   if (cachedData) {
     try {
       appData = JSON.parse(cachedData);
-      if (appData.calls) appData.calls = appData.calls.map(c => ({ ...c, date: normalizeDate(c.date) }));
+      reconcileCallsWithAlignment();
       sanitizeSupervisorsList();
-      initializeDateSelectors();
       populateFilterDropdowns();
       renderAll();
     } catch (e) {}
@@ -104,6 +132,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   await syncData(false);
+  // Auto-poll every 25 seconds so Alignment or Call Details sheet changes update automatically
+  setInterval(() => syncData(false), 25000);
 });
 
 async function syncData(manual = false) {
@@ -157,7 +187,7 @@ async function syncData(manual = false) {
   }
 
   if (loaded) {
-    appData.calls = (appData.calls || []).map(c => ({ ...c, date: normalizeDate(c.date) }));
+    reconcileCallsWithAlignment();
     sanitizeSupervisorsList();
     localStorage.setItem("supervisorAppCache", JSON.stringify(appData));
     initializeDateSelectors();
@@ -171,14 +201,12 @@ async function syncData(manual = false) {
 }
 
 function initializeDateSelectors() {
-  const dates = [...new Set((appData.calls || []).map(c => c.date))].filter(Boolean).sort();
-  const latest = dates.length > 0 ? dates[dates.length - 1] : getTodayDateStr();
-
+  const today = getTodayDateStr();
   const act = document.getElementById("activeDateSelect");
-  if (act && !act.value) act.value = latest;
+  if (act && !act.value) act.value = today;
 
   const inp = document.getElementById("inputDate");
-  if (inp && !inp.value) inp.value = getTodayDateStr();
+  if (inp && !inp.value) inp.value = today;
 }
 
 function renderAll() {
@@ -193,7 +221,7 @@ function renderAll() {
 }
 
 // ----------------------------------------------------
-// 1. TOP KPI CARDS
+// 1. TOP KPI CARDS (Skill Breakdown shows 158 instead of Live Chat)
 // ----------------------------------------------------
 function renderKPIs() {
   const calls = appData.calls || [];
@@ -213,8 +241,13 @@ function renderKPIs() {
   document.getElementById("kpiInboundCount").textContent = inC;
   document.getElementById("kpiOutboundCount").textContent = outC;
 
-  const sc = { "Mass": 0, "Premium": 0, "Retailer-456": 0, "Live Chat": 0 };
-  calls.forEach(c => { sc[c.skill || "Other"] = (sc[c.skill || "Other"] || 0) + 1; });
+  const sc = { "Mass": 0, "Premium": 0, "Retailer-456": 0, "158": 0 };
+  calls.forEach(c => {
+    const sk = String(c.skill || "").trim();
+    if (sk in sc) {
+      sc[sk] += 1;
+    }
+  });
   document.getElementById("kpiSkillBreakdown").innerHTML = Object.entries(sc).map(([k, v]) => `
     <div class="flex items-center justify-between bg-slate-900 px-2.5 py-1.5 rounded border border-slate-800">
       <span class="text-slate-300 font-medium">${k}</span><span class="font-bold text-cyanGlow">${v}</span>
@@ -222,7 +255,7 @@ function renderKPIs() {
 }
 
 // ----------------------------------------------------
-// 2. SUPERVISOR LEADERBOARD (INBOUND vs OUTBOUND PER SUPERVISOR, KAZI TAREQUE REMOVED)
+// 2. SUPERVISOR LEADERBOARD (LANDSCAPE COMPACT CARDS - ALL VISIBLE AT ONCE)
 // ----------------------------------------------------
 function setSupervisorMode(m) {
   supervisorMode = m;
@@ -266,22 +299,22 @@ function renderSupervisorLeaderboard() {
     const outShare = st.total > 0 ? 100 - inShare : 0;
 
     return `
-      <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1.5">
-        <div class="flex flex-wrap justify-between text-xs items-center gap-1">
-          <span class="font-semibold text-slate-200 flex items-center">
-            <span class="w-4 h-4 inline-flex items-center justify-center rounded-full bg-slate-800 text-cyanGlow mr-2 text-[9px] font-bold">${i + 1}</span>
-            ${name}
-          </span>
-          <div class="flex items-center gap-1.5 text-[10px]">
-            <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyanGlow border border-cyan-500/30 font-semibold">IN: ${st.inbound}</span>
-            <span class="px-1.5 py-0.5 rounded bg-purple-500/15 text-neonViolet border border-purple-500/30 font-semibold">OUT: ${st.outbound}</span>
-            <span class="font-extrabold text-white bg-slate-800 px-2 py-0.5 rounded">Total: ${st.total}</span>
+      <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between gap-2 hover:border-cyanGlow/40 transition">
+        <div class="flex items-start justify-between gap-1">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="w-4 h-4 flex-shrink-0 inline-flex items-center justify-center rounded-full bg-slate-800 text-cyanGlow text-[9px] font-extrabold">${i + 1}</span>
+            <span class="font-semibold text-slate-200 text-[11px] sm:text-xs leading-tight truncate" title="${name}">${name}</span>
           </div>
+          <span class="font-extrabold text-white bg-slate-800 px-1.5 py-0.5 rounded text-[10px] flex-shrink-0">${st.total}</span>
+        </div>
+        <div class="flex items-center justify-between gap-1 text-[10px]">
+          <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyanGlow border border-cyan-500/30 font-semibold">IN: ${st.inbound}</span>
+          <span class="px-1.5 py-0.5 rounded bg-purple-500/15 text-neonViolet border border-purple-500/30 font-semibold">OUT: ${st.outbound}</span>
         </div>
         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
           <div class="h-full flex rounded-full overflow-hidden transition-all" style="width:${totalW}%">
-            <div class="bg-cyanGlow h-full" style="width:${inShare}%" title="Inbound: ${st.inbound}"></div>
-            <div class="bg-neonViolet h-full" style="width:${outShare}%" title="Outbound: ${st.outbound}"></div>
+            <div class="bg-cyanGlow h-full" style="width:${inShare}%"></div>
+            <div class="bg-neonViolet h-full" style="width:${outShare}%"></div>
           </div>
         </div>
       </div>`;
@@ -335,7 +368,6 @@ function renderDailyTrendChart() {
   const month = parseInt(refParts[1], 10) || (new Date().getMonth() + 1);
   const ymPrefix = `${year}-${String(month).padStart(2, "0")}`;
 
-  // Generate 30 days (Day 01 to Day 30) of the active month so 30 days are visible together
   const days30 = [];
   const dm = {};
   for (let day = 1; day <= 30; day++) {
@@ -528,8 +560,8 @@ function renderRepeatMsisdn() {
 function populateFilterDropdowns() {
   const s = [...new Set([...(appData.supervisors || []), ...(appData.calls || []).map(c => c.supervisorInCall)])]
     .filter(x => x && x !== "#N/A" && !isExcludedSupervisor(x));
-  const t = [...new Set((appData.calls || []).map(c => c.teamLeader))].filter(Boolean);
-  const sk = [...new Set((appData.calls || []).map(c => c.skill))].filter(Boolean);
+  const t = [...new Set([...(appData.alignment || []).map(a => a.supervisor), ...(appData.calls || []).map(c => c.teamLeader)])].filter(Boolean);
+  const sk = [...new Set([...(appData.alignment || []).map(a => a.lob), ...(appData.calls || []).map(c => c.skill)])].filter(Boolean);
   const html = (arr, lbl) => `<option value="ALL">${lbl}</option>` + arr.map(x => `<option value="${x}">${x}</option>`).join("");
   document.getElementById("filterSupervisor").innerHTML = html(s, "All");
   document.getElementById("filterTL").innerHTML = html(t, "All");
@@ -640,7 +672,7 @@ function openAddCallModal() {
 function closeAddCallModal() { document.getElementById("addCallModal").classList.add("hidden"); document.getElementById("submitStatusMsg").classList.add("hidden"); }
 
 function autoFillAgentByAvaya(v) {
-  const a = (appData.alignment || []).find(x => String(x.avaya) === String(v));
+  const a = (appData.alignment || []).find(x => String(x.avaya).trim() === String(v).trim());
   if (a) {
     document.getElementById("inputCsaName").value = a.name;
     document.getElementById("inputTeamLeader").value = a.supervisor;
@@ -671,6 +703,7 @@ async function submitNewCall(e) {
 
   // 1. Update UI & LocalStorage Immediately
   appData.calls.unshift(nc);
+  reconcileCallsWithAlignment();
   localStorage.setItem("supervisorAppCache", JSON.stringify(appData));
   document.getElementById("activeDateSelect").value = nc.date;
   renderAll();
